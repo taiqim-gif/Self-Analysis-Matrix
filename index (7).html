@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f5f5f5">
+<title>自己分析・ギャップ分析シート</title>
+<style>
+  :root{
+    --bg:#f3f4f6;
+    --card:#fff;
+    --line:#222;
+    --muted:#666;
+    --soft:#f7f7f7;
+    --accent:#1f5eff;
+    --danger:#c62828;
+    --history:#f1f1f1;
+    --radius:12px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:#111;
+    font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+    line-height:1.5;
+  }
+  button,input,textarea{font:inherit}
+  .topbar{
+    position:sticky;top:0;z-index:20;
+    background:rgba(255,255,255,.96);
+    border-bottom:1px solid #ddd;
+    padding:10px 12px;
+    backdrop-filter:blur(10px);
+  }
+  .topbar-inner{
+    max-width:1100px;margin:auto;
+    display:flex;gap:8px;align-items:center;justify-content:space-between;
+  }
+  .title{font-weight:800;font-size:17px}
+  .actions{display:flex;gap:7px;flex-wrap:wrap}
+  .btn{
+    border:1px solid #bbb;background:#fff;color:#111;
+    border-radius:9px;padding:8px 12px;cursor:pointer;
+    font-weight:700;
+  }
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.small{font-size:13px;padding:6px 9px}
+  .btn.danger{color:var(--danger)}
+  .container{max-width:1100px;margin:18px auto;padding:0 12px 50px}
+  .notice{
+    background:#fff;border:1px solid #ddd;border-radius:var(--radius);
+    padding:12px 14px;margin-bottom:16px;font-size:13px;color:#444;
+  }
+  .sheet{
+    background:var(--card);border:1px solid #bbb;border-radius:14px;
+    padding:18px;margin-bottom:22px;box-shadow:0 2px 8px rgba(0,0,0,.04);
+  }
+  .sheet h1{
+    text-align:center;font-size:23px;margin:2px 0 16px;
+  }
+  .theme-line{
+    display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:14px;
+  }
+  .theme-line input{
+    border:0;border-bottom:2px solid #222;outline:none;
+    width:min(420px,75vw);text-align:center;padding:4px 6px;background:transparent;
+  }
+
+  /* Matrix 1 */
+  .matrix{
+    display:grid;grid-template-columns:54px 1fr 1fr;
+    border:2px solid var(--line);
+  }
+  .matrix .corner{border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-height:62px}
+  .matrix .colhead{
+    font-weight:800;text-align:center;padding:13px 7px;
+    border-bottom:1px solid var(--line);
+  }
+  .matrix .colhead:nth-child(2){border-right:1px solid var(--line)}
+  .rowlabel{
+    writing-mode:vertical-rl;text-orientation:mixed;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;letter-spacing:2px;padding:12px 7px;
+    border-right:1px solid var(--line);
+  }
+  .cell{
+    min-height:390px;padding:18px 16px;
+    border-bottom:1px solid var(--line);
+  }
+  .matrix > .cell:nth-last-child(-n+2){border-bottom:0}
+  .matrix .cell:nth-child(3),
+  .matrix .cell:nth-child(5){border-right:1px solid var(--line)}
+  .cell h2{font-size:18px;margin:0 0 6px}
+  .cell .guide{font-weight:700;margin-bottom:8px}
+  .cell .rule{border-bottom:2px solid #222;margin:6px 0 18px}
+  .example{font-weight:700;margin:0 0 8px}
+  .entry-area{margin-top:12px}
+
+  /* Matrix 2 */
+  .matrix2{
+    display:grid;grid-template-columns:110px 1fr 1fr;
+    border:2px solid var(--line);border-radius:12px;overflow:hidden;
+  }
+  .matrix2 > div{border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .matrix2 > div:nth-child(3n){border-right:0}
+  .matrix2 .head{text-align:center;font-weight:800;padding:12px 6px}
+  .matrix2 .side{
+    display:flex;align-items:center;justify-content:center;
+    text-align:center;font-weight:800;white-space:pre-line;padding:10px;
+  }
+  .matrix2 .mcell{padding:17px;min-height:380px}
+  .matrix2 .bottom{border-bottom:0}
+  .matrix2 .mcell:nth-last-child(-n+2){border-bottom:0}
+
+  /* Matrix 3 */
+  .gap-table{
+    border:2px solid var(--line);
+    display:grid;grid-template-columns:210px 1fr;
+  }
+  .gap-label,.gap-content{
+    min-height:116px;border-bottom:1px solid var(--line);
+  }
+  .gap-label{
+    border-right:1px solid var(--line);
+    display:flex;align-items:center;padding:15px;
+    font-weight:800;
+  }
+  .gap-content{padding:12px 18px}
+  .gap-table > :nth-last-child(-n+2){border-bottom:0}
+  .gap-title{font-size:14px;font-weight:800;margin-bottom:5px;color:#333}
+
+  /* Entries */
+  .entry-box{
+    margin-top:12px;
+    background:var(--soft);
+    border:1px solid #ddd;
+    border-radius:10px;padding:10px;
+  }
+  .entry-box textarea{
+    width:100%;min-height:70px;resize:vertical;
+    border:1px solid #bbb;border-radius:8px;padding:9px;
+    background:#fff;outline:none;
+  }
+  .entry-box textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(31,94,255,.12)}
+  .entry-tools{display:flex;justify-content:flex-end;gap:7px;margin-top:7px}
+  .current-list,.history-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+  .list-title{
+    font-size:13px;font-weight:800;color:#333;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .item{
+    background:#fff;border:1px solid #d3d3d3;border-radius:9px;padding:9px 10px;
+  }
+  .item-main{white-space:pre-wrap;word-break:break-word}
+  .item-meta{font-size:11px;color:#777;margin-top:5px}
+  .item-tools{display:flex;gap:5px;justify-content:flex-end;margin-top:7px;flex-wrap:wrap}
+  .history{
+    margin-top:12px;padding-top:12px;border-top:1px dashed #aaa;
+  }
+  .history .item{background:var(--history);font-size:13px}
+  .history.hidden{display:none}
+  .badge{
+    display:inline-block;font-size:11px;border:1px solid #bbb;
+    border-radius:99px;padding:2px 7px;background:#fff;color:#555;
+  }
+  .empty{font-size:12px;color:#888;padding:5px 0}
+  .footer-note{text-align:center;color:#777;font-size:12px;margin-top:20px}
+
+  @media(max-width:700px){
+    .topbar-inner{align-items:flex-start;flex-direction:column}
+    .actions{width:100%}
+    .actions .btn{flex:1}
+    .container{padding:0 7px 40px}
+    .sheet{padding:10px;border-radius:10px}
+    .sheet h1{font-size:19px}
+    .matrix{grid-template-columns:39px 1fr 1fr}
+    .matrix .cell{min-height:420px;padding:13px 9px}
+    .cell h2{font-size:15px}
+    .cell .guide{font-size:13px}
+    .matrix2{grid-template-columns:70px 1fr 1fr}
+    .matrix2 .mcell{padding:10px;min-height:420px}
+    .matrix2 .side{font-size:13px}
+    .gap-table{grid-template-columns:105px 1fr}
+    .gap-label{padding:9px;font-size:13px}
+    .gap-content{padding:9px 10px}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="title">自己分析・ギャップ分析シート</div>
+    <div class="actions">
+      <button class="btn small" id="historyAllBtn">履歴表示</button>
+      <button class="btn small" id="hideHistoryBtn">履歴を隠す</button>
+      <button class="btn small" id="exportBtn">バックアップ</button>
+      <button class="btn small" id="importBtn">復元</button>
+      <button class="btn small danger" id="clearBtn">全データ削除</button>
+      <input type="file" id="importFile" accept=".json" hidden>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div class="notice">
+    <strong>保存方式：</strong>このページ単体では、記入内容はこの端末・このブラウザの
+    <strong>ローカル保存</strong>です。GitHub Pagesで公開しても、他の端末と自動共有はされません。
+    「バックアップ」でJSONを保存できます。
+  </div>
+
+  <section class="sheet" id="sheet1">
+    <h1>「基本の自己分析マトリックス（理想の高さ × 現在の到達度）」</h1>
+    <div class="theme-line">
+      <input id="theme1" placeholder="テーマ・分野を入力">
+    </div>
+    <div class="matrix">
+      <div class="corner"></div>
+      <div class="colhead">現在の到達度：低い</div>
+      <div class="colhead">現在の到達度：高い</div>
+
+      <div class="rowlabel">理想の高さ：高い</div>
+      <div class="cell" data-section="basic" data-cell="priority">
+        <h2>【最優先ゾーン】</h2><div class="guide">ここにエネルギーを集中する</div><div class="rule"></div>
+        <p class="example">具体例：</p><div class="rule"></div>
+        <div class="entry-area"></div>
+      </div>
+      <div class="cell" data-section="basic" data-cell="strengthen">
+        <h2>【維持・強化ゾーン】</h2><div class="guide">さらに伸ばす・習慣化する</div><div class="rule"></div>
+        <p class="example">具体例：</p><div class="rule"></div>
+        <div class="entry-area"></div>
+      </div>
+
+      <div class="rowlabel">理想の高さ：低い</div>
+      <div class="cell" data-section="basic" data-cell="later">
+        <h2>【捨てる・後回しゾーン】</h2><div class="guide">やらないことを決める</div><div class="rule"></div>
+        <p class="example">具体例：</p><div class="rule"></div>
+        <div class="entry-area"></div>
+      </div>
+      <div class="cell" data-section="basic" data-cell="reserve">
+        <h2>【余裕ゾーン】</h2><div class="guide">時間をかけすぎない</div><div class="rule"></div>
+        <p class="example">具体例：</p><div class="rule"></div>
+        <div class="entry-area"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet" id="sheet2">
+    <h1>自己躾けマトリックス（やるべきこと × 実際にやっていること）</h1>
+    <div class="matrix2">
+      <div></div><div class="head">実際にやれている</div><div class="head">実際にやれていない</div>
+
+      <div class="side">やるべき<br>だとわかっている</div>
+      <div class="mcell" data-section="discipline" data-cell="strength">
+        <h2>【強み・継続ゾーン】</h2><div class="guide">さらに磨きをかける</div>
+        <div class="entry-area"></div>
+      </div>
+      <div class="mcell" data-section="discipline" data-cell="growth">
+        <h2>【最大の成長ゾーン】</h2><div class="guide">ここを日記で徹底的に躾ける</div>
+        <div class="entry-area"></div>
+      </div>
+
+      <div class="side bottom">やるべき<br>か曖昧</div>
+      <div class="mcell bottom" data-section="discipline" data-cell="confirm">
+        <h2>【確認ゾーン】</h2><div class="guide">本当に必要か見直す</div>
+        <div class="entry-area"></div>
+      </div>
+      <div class="mcell bottom" data-section="discipline" data-cell="discard">
+        <h2>【捨てる候補】</h2><div class="guide">やらない決断をする</div>
+        <div class="entry-area"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet" id="sheet3">
+    <h1>「ギャップ分析表」</h1>
+    <div class="theme-line">
+      <span><strong>テーマ：</strong></span>
+      <input id="theme3" placeholder="営業力 / 抽象思考 / 習慣力 など">
+    </div>
+    <div class="gap-table">
+      <div class="gap-label">理想の状態（5年後）</div>
+      <div class="gap-content" data-section="gap" data-cell="ideal">
+        <div class="entry-area"></div>
+      </div>
+      <div class="gap-label">現在の状態</div>
+      <div class="gap-content" data-section="gap" data-cell="current">
+        <div class="entry-area"></div>
+      </div>
+      <div class="gap-label">ギャップの大きさ（大・中・小）</div>
+      <div class="gap-content" data-section="gap" data-cell="size">
+        <div class="entry-area"></div>
+      </div>
+      <div class="gap-label">ギャップを生んでいる原因</div>
+      <div class="gap-content" data-section="gap" data-cell="cause">
+        <div class="entry-area"></div>
+      </div>
+      <div class="gap-label">明日からやる「微差の行動」</div>
+      <div class="gap-content" data-section="gap" data-cell="action">
+        <div class="entry-area"></div>
+      </div>
+      <div class="gap-label">自分への宣言・言い聞かせ</div>
+      <div class="gap-content" data-section="gap" data-cell="declaration">
+        <div class="entry-area"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-note">入力内容は自動保存されます。編集すると、変更前の内容は履歴として残ります。</div>
+</main>
+
+<script>
+(() => {
+  const KEY = "self_analysis_matrix_v1";
+  const now = () => new Date().toLocaleString("ja-JP", {
+    year:"numeric", month:"2-digit", day:"2-digit",
+    hour:"2-digit", minute:"2-digit"
+  });
+
+  let data = JSON.parse(localStorage.getItem(KEY) || "null") || {
+    theme1:"",
+    theme3:"",
+    cells:{}
+  };
+
+  function saveData(){
+    localStorage.setItem(KEY, JSON.stringify(data));
+  }
+
+  function cellData(section, cell){
+    data.cells[section] ||= {};
+    data.cells[section][cell] ||= {active:[], history:[]};
+    return data.cells[section][cell];
+  }
+
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, c => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[c]));
+  }
+
+  function addHistory(bucket, text, type){
+    bucket.history.unshift({
+      id: crypto.randomUUID(),
+      text,
+      date: now(),
+      type
+    });
+  }
+
+  function renderCell(el){
+    const section = el.dataset.section;
+    const cell = el.dataset.cell;
+    const bucket = cellData(section, cell);
+    const area = el.querySelector(".entry-area");
+
+    area.innerHTML = `
+      <div class="list-title">
+        <span>現在進行中 <span class="badge">${bucket.active.length}</span></span>
+      </div>
+      <div class="current-list">
+        ${bucket.active.length
+          ? bucket.active.map(item => `
+            <div class="item" data-id="${esc(item.id)}">
+              <div class="item-main">${esc(item.text)}</div>
+              <div class="item-meta">更新：${esc(item.date)}</div>
+              <div class="item-tools">
+                <button class="btn small edit-btn">編集</button>
+                <button class="btn small archive-btn">履歴へ</button>
+              </div>
+            </div>`).join("")
+          : `<div class="empty">現在進行中の項目はありません。</div>`}
+      </div>
+
+      <div class="entry-box">
+        <textarea class="new-text" placeholder="ここに記入して保存"></textarea>
+        <div class="entry-tools">
+          <button class="btn small primary add-btn">保存</button>
+        </div>
+      </div>
+
+      <div class="history hidden">
+        <div class="list-title">
+          <span>過去リスト（履歴） <span class="badge">${bucket.history.length}</span></span>
+        </div>
+        <div class="history-list">
+          ${bucket.history.length
+            ? bucket.history.map(item => `
+              <div class="item">
+                <div class="item-main">${esc(item.text)}</div>
+                <div class="item-meta">${esc(item.date)} ／ ${esc(item.type)}</div>
+              </div>`).join("")
+            : `<div class="empty">履歴はありません。</div>`}
+        </div>
+      </div>
+    `;
+
+    area.querySelector(".add-btn").addEventListener("click", () => {
+      const textarea = area.querySelector(".new-text");
+      const text = textarea.value.trim();
+      if(!text) return;
+      bucket.active.push({
+        id: crypto.randomUUID(),
+        text,
+        date: now()
+      });
+      saveData();
+      renderAll();
+    });
+
+    area.querySelectorAll(".edit-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const itemEl = btn.closest(".item");
+        const id = itemEl.dataset.id;
+        const item = bucket.active.find(x => x.id === id);
+        if(!item) return;
+        const next = prompt("内容を編集してください", item.text);
+        if(next === null) return;
+        const text = next.trim();
+        if(!text) return;
+        addHistory(bucket, item.text, "更新前");
+        item.text = text;
+        item.date = now();
+        saveData();
+        renderAll();
+      });
+    });
+
+    area.querySelectorAll(".archive-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const itemEl = btn.closest(".item");
+        const id = itemEl.dataset.id;
+        const index = bucket.active.findIndex(x => x.id === id);
+        if(index < 0) return;
+        const item = bucket.active.splice(index, 1)[0];
+        addHistory(bucket, item.text, "履歴へ移動");
+        saveData();
+        renderAll();
+      });
+    });
+  }
+
+  function renderAll(){
+    document.getElementById("theme1").value = data.theme1 || "";
+    document.getElementById("theme3").value = data.theme3 || "";
+    document.querySelectorAll("[data-section][data-cell]").forEach(renderCell);
+  }
+
+  document.getElementById("theme1").addEventListener("input", e => {
+    data.theme1 = e.target.value; saveData();
+  });
+  document.getElementById("theme3").addEventListener("input", e => {
+    data.theme3 = e.target.value; saveData();
+  });
+
+  function setHistory(show){
+    document.querySelectorAll(".history").forEach(x => x.classList.toggle("hidden", !show));
+  }
+
+  document.getElementById("historyAllBtn").addEventListener("click", () => setHistory(true));
+  document.getElementById("hideHistoryBtn").addEventListener("click", () => setHistory(false));
+
+  document.getElementById("exportBtn").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "自己分析バックアップ_" +
+      new Date().toISOString().slice(0,10) + ".json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  document.getElementById("importBtn").addEventListener("click", () => {
+    document.getElementById("importFile").click();
+  });
+
+  document.getElementById("importFile").addEventListener("change", async e => {
+    const file = e.target.files[0];
+    if(!file) return;
+    try{
+      const imported = JSON.parse(await file.text());
+      if(!imported || typeof imported !== "object" || !imported.cells) throw new Error();
+      data = imported;
+      saveData();
+      renderAll();
+      alert("データを復元しました。");
+    }catch{
+      alert("バックアップファイルを読み込めませんでした。");
+    }
+    e.target.value = "";
+  });
+
+  document.getElementById("clearBtn").addEventListener("click", () => {
+    if(!confirm("現在の入力・履歴をすべて削除します。よろしいですか？")) return;
+    localStorage.removeItem(KEY);
+    data = {theme1:"", theme3:"", cells:{}};
+    renderAll();
+  });
+
+  renderAll();
+})();
+</script>
+</body>
+</html>
