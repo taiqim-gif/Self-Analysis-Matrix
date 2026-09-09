@@ -168,7 +168,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
       <div class="matrix-row">
         <div class="axis-left-label small">優先度</div>
         <div class="picker-grid g4">
-          <div class="p-corner"></div><div class="p-colhead">できていない</div><div class="p-colhead">できている</div>
+          <div class="p-corner"></div><div class="p-colhead">できてない</div><div class="p-colhead">できている</div>
           <div class="p-rowlabel">高い</div>
           <button type="button" class="p-cell" data-value="priority.focus">最優先・成長</button>
           <button type="button" class="p-cell" data-value="priority.maintain">維持・強化</button>
@@ -203,14 +203,14 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
       </div>
     </div>
     <div class="picker-page" data-page="language">
-      <div class="lang-hint">4つの項目をまとめて1件の記録として保存します。</div>
+      <div class="lang-hint">4つの項目をまとめて1件の記録として保存</div>
     </div>
   </div>
 
   <div id="normalInputArea">
     <div class="selected-label" id="selectedLabel">選択ゾーン：最優先・成長</div>
     <textarea id="mainInput" placeholder="ここに内容を入力してください"></textarea>
-    <div class="input-footer"><span class="input-help">保存すると選択した表の「現在進行中」に追加されます。</span><button class="btn primary save-btn" id="saveBtn">保存</button></div>
+    <div class="input-footer"><span class="input-help">保存すると選択した表の「現在進行中」に追加</span><button class="btn primary save-btn" id="saveBtn">保存</button></div>
   </div>
 
   <div id="langInputArea" style="display:none">
@@ -218,7 +218,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
     <div class="lang-field"><label>そこから抽出した本質・法則</label><textarea id="langB"></textarea></div>
     <div class="lang-field"><label>他の分野への応用</label><textarea id="langC"></textarea></div>
     <div class="lang-field"><label>自分への教訓・躾け</label><textarea id="langD"></textarea></div>
-    <div class="input-footer"><span class="input-help" id="langHelp">4項目をまとめて1件として保存します。</span><button class="btn primary save-btn" id="langSaveBtn">追加</button></div>
+    <div class="input-footer"><span class="input-help" id="langHelp">4項目をまとめて1件として保存</span><button class="btn primary save-btn" id="langSaveBtn">追加</button></div>
   </div>
 </section>
 </div>
@@ -231,7 +231,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
   <div class="matrix-row">
     <div class="axis-left-label">優先度</div>
     <div class="matrix">
-      <div class="corner"></div><div class="colhead">できていない</div><div class="colhead">できている</div>
+      <div class="corner"></div><div class="colhead">できてない</div><div class="colhead">できている</div>
       <div class="rowlabel">高い</div>
       <div class="cell" data-section="priority" data-cell="focus"><div class="cell-head"><h2>最優先・成長</h2><span class="badge active-count">0</span></div><div class="guide">ここにエネルギーを集中する／日記で徹底的に躾ける</div><div class="current-list"></div><div class="history hidden"></div></div>
       <div class="cell" data-section="priority" data-cell="maintain"><div class="cell-head"><h2>維持・強化</h2><span class="badge active-count">0</span></div><div class="guide">さらに伸ばす・習慣化する</div><div class="current-list"></div><div class="history hidden"></div></div>
@@ -248,7 +248,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
     <div class="gap-label">理想の状態（5年後）</div><div class="gap-content" data-section="gap" data-cell="ideal"><div class="current-list"></div><div class="history hidden"></div></div>
     <div class="gap-label">現在の状態</div><div class="gap-content" data-section="gap" data-cell="current"><div class="current-list"></div><div class="history hidden"></div></div>
     <div class="gap-label">ギャップの大きさ（大・中・小）</div><div class="gap-content" data-section="gap" data-cell="size"><div class="current-list"></div><div class="history hidden"></div></div>
-    <div class="gap-label">ギャップを生んでいる原因</div><div class="gap-content" data-section="gap" data-cell="cause"><div class="current-list"></div><div class="history hidden"></div></div>
+    <div class="gap-label">ギャップの原因</div><div class="gap-content" data-section="gap" data-cell="cause"><div class="current-list"></div><div class="history hidden"></div></div>
     <div class="gap-label">すぐやる微差の行動</div><div class="gap-content" data-section="gap" data-cell="action"><div class="current-list"></div><div class="history hidden"></div></div>
     <div class="gap-label">自分への宣言・言い聞かせ</div><div class="gap-content" data-section="gap" data-cell="declaration"><div class="current-list"></div><div class="history hidden"></div></div>
   </div>
@@ -269,7 +269,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
   </div>
 </section>
 </div>
-<div class="footer-note">入力内容はこの端末・このブラウザに自動保存されます。</div>
+<div class="footer-note">入力内容はこの端末・このブラウザに自動保存</div>
 </main>
 
 <script>
@@ -333,11 +333,11 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
   function startEditLang(item){
     langEditId=item.id;
     document.getElementById("langA").value=item.a||"";document.getElementById("langB").value=item.b||"";document.getElementById("langC").value=item.c||"";document.getElementById("langD").value=item.d||"";
-    document.getElementById("langSaveBtn").textContent="更新";document.getElementById("langHelp").textContent="編集中：内容を直して「更新」を押してください。";
+    document.getElementById("langSaveBtn").textContent="更新";document.getElementById("langHelp").textContent="編集中：内容を直して「更新」";
     document.getElementById("langA").focus();
   }
   function cancelEditLang(){
-    langEditId=null;document.getElementById("langSaveBtn").textContent="追加";document.getElementById("langHelp").textContent="4項目をまとめて1件として保存します。";
+    langEditId=null;document.getElementById("langSaveBtn").textContent="追加";document.getElementById("langHelp").textContent="4項目をまとめて1件として保存";
     ["langA","langB","langC","langD"].forEach(id=>document.getElementById(id).value="");
   }
   document.getElementById("langSaveBtn").onclick=()=>{
