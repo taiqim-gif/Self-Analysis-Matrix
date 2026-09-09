@@ -323,10 +323,10 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
   function renderLanguage(){
     const b=bucket("language","entries");
     const rows=document.getElementById("langRows");
-    rows.innerHTML=b.active.length?b.active.map(x=>langRowHTML(x,false)).join(""):`<div class="lang-empty">現在進行中の項目はありません</div>`;
+    rows.innerHTML=b.active.length?b.active.map(x=>langRowHTML(x,false)).join(""):`<div class="lang-empty">進行中項目なし</div>`;
     const histRows=document.getElementById("langHistRows"), histCount=document.getElementById("langHistCount");
     if(histCount)histCount.textContent=b.history.length;
-    histRows.innerHTML=b.history.length?b.history.map(x=>langRowHTML(x,true)).join(""):`<div class="lang-empty">履歴はありません</div>`;
+    histRows.innerHTML=b.history.length?b.history.map(x=>langRowHTML(x,true)).join(""):`<div class="lang-empty">履歴なし</div>`;
     rows.querySelectorAll(".lang-edit").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".lang-row").dataset.id,item=b.active.find(x=>x.id===id);if(!item)return;startEditLang(item)});
     rows.querySelectorAll(".lang-archive").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".lang-row").dataset.id,i=b.active.findIndex(x=>x.id===id);if(i<0)return;const item=b.active.splice(i,1)[0];item.date=now();b.history.unshift(item);if(langEditId===item.id)cancelEditLang();save();renderAll()});
   }
