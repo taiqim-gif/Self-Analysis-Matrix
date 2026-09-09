@@ -275,7 +275,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
 <script>
 (() => {
   const KEY="self_analysis_matrix_v1";
-  const LABELS={"priority.focus":"最優先・成長","priority.maintain":"維持・強化","priority.discard":"捨てる・後回し","priority.spare":"余裕・確認","gap.ideal":"理想の状態（5年後）","gap.current":"現在の状態","gap.size":"ギャップの大きさ（大・中・小）","gap.cause":"ギャップを生んでいる原因","gap.action":"すぐやる微差の行動","gap.declaration":"自分への宣言・言い聞かせ"};
+  const LABELS={"priority.focus":"最優先・成長","priority.maintain":"維持・強化","priority.discard":"捨てる・後回し","priority.spare":"余裕・確認","gap.ideal":"理想の状態（5年後）","gap.current":"現在の状態","gap.size":"ギャップの大きさ","gap.cause":"ギャップを生んでいる原因","gap.action":"すぐやる微差の行動","gap.declaration":"自分への宣言・言い聞かせ"};
   let data=JSON.parse(localStorage.getItem(KEY)||"null")||{theme1:"",theme3:"",cells:{}};
   const now=()=>new Date().toLocaleString("ja-JP",{year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
   const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -323,7 +323,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
   function renderLanguage(){
     const b=bucket("language","entries");
     const rows=document.getElementById("langRows");
-    rows.innerHTML=b.active.length?b.active.map(x=>langRowHTML(x,false)).join(""):`<div class="lang-empty">進行中項目なし</div>`;
+    rows.innerHTML=b.active.length?b.active.map(x=>langRowHTML(x,false)).join(""):`<div class="lang-empty">進行中の項目なし</div>`;
     const histRows=document.getElementById("langHistRows"), histCount=document.getElementById("langHistCount");
     if(histCount)histCount.textContent=b.history.length;
     histRows.innerHTML=b.history.length?b.history.map(x=>langRowHTML(x,true)).join(""):`<div class="lang-empty">履歴なし</div>`;
