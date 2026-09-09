@@ -150,7 +150,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
 <main class="container">
 
 <div class="view-tabs">
-  <button type="button" class="vtab active" data-view="input">入力</button>
+  <button type="button" class="vtab active" data-view="input">自由に書く</button>
   <button type="button" class="vtab" data-view="sheets">一覧・記録表</button>
 </div>
 
@@ -182,7 +182,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
       <div class="gap-picker">
         <div class="gap-group-title">1 状態</div>
         <div class="gap-group">
-          <button type="button" class="gap-btn" data-value="gap.ideal">理想（5年後）</button>
+          <button type="button" class="gap-btn" data-value="gap.ideal">理想</button>
           <button type="button" class="gap-btn" data-value="gap.current">現在</button>
         </div>
         <div class="gap-group">
@@ -245,7 +245,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
 <section class="sheet">
   <div class="sheet-head"><h1>ギャップ分析表</h1><input id="theme3" placeholder="テーマ：営業力・抽象思考・習慣力など"></div>
   <div class="gap-table">
-    <div class="gap-label">理想の状態（5年後）</div><div class="gap-content" data-section="gap" data-cell="ideal"><div class="current-list"></div><div class="history hidden"></div></div>
+    <div class="gap-label">理想の状態 (5年後)</div><div class="gap-content" data-section="gap" data-cell="ideal"><div class="current-list"></div><div class="history hidden"></div></div>
     <div class="gap-label">現在の状態</div><div class="gap-content" data-section="gap" data-cell="current"><div class="current-list"></div><div class="history hidden"></div></div>
     <div class="gap-label">ギャップの大きさ（大・中・小）</div><div class="gap-content" data-section="gap" data-cell="size"><div class="current-list"></div><div class="history hidden"></div></div>
     <div class="gap-label">ギャップの原因</div><div class="gap-content" data-section="gap" data-cell="cause"><div class="current-list"></div><div class="history hidden"></div></div>
@@ -257,13 +257,13 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
 <section class="sheet">
   <div class="sheet-head"><h1>言語化・構造化シート</h1></div>
   <div class="lang-table">
-    <div class="lang-head">具体的な経験・出来事</div><div class="lang-head">そこから抽出した本質・法則</div><div class="lang-head">他の分野への応用</div><div class="lang-head">自分への教訓・躾け</div><div class="lang-head">操作</div>
+    <div class="lang-head">1 具体的な経験・出来事</div><div class="lang-head">2 そこから抽出した本質・法則</div><div class="lang-head">3 他の分野への応用</div><div class="lang-head">4 自分への教訓・躾け</div><div class="lang-head">操作</div>
     <div id="langRows" style="display:contents"></div>
   </div>
   <div class="history hidden" id="langHistoryBlock">
     <div class="history-title">過去リスト<span class="badge" id="langHistCount">0</span></div>
     <div class="lang-table lang-history-table">
-      <div class="lang-head">具体的な経験・出来事</div><div class="lang-head">そこから抽出した本質・法則</div><div class="lang-head">他の分野への応用</div><div class="lang-head">自分への教訓・躾け</div><div class="lang-head">日時</div>
+      <div class="lang-head">1 具体的な経験・出来事</div><div class="lang-head">2 そこから抽出した本質・法則</div><div class="lang-head">3 他の分野への応用</div><div class="lang-head">4 自分への教訓・躾け</div><div class="lang-head">日時</div>
       <div id="langHistRows" style="display:contents"></div>
     </div>
   </div>
@@ -301,7 +301,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
   function renderCell(el){
     const b=bucket(el.dataset.section,el.dataset.cell), cur=el.querySelector(".current-list"), hist=el.querySelector(".history"), count=el.querySelector(".active-count");
     if(count)count.textContent=b.active.length;
-    cur.innerHTML=b.active.length?b.active.map(x=>`<div class="item" data-id="${esc(x.id)}"><div class="item-main">${esc(x.text)}</div><div class="item-meta">更新：${esc(x.date)}</div><div class="item-tools"><button class="btn tiny edit-btn">編集</button><button class="btn tiny archive-btn">履歴へ</button></div></div>`).join(""):`<div class="empty">進行中の項目なし</div>`;
+    cur.innerHTML=b.active.length?b.active.map(x=>`<div class="item" data-id="${esc(x.id)}"><div class="item-main">${esc(x.text)}</div><div class="item-meta">更新：${esc(x.date)}</div><div class="item-tools"><button class="btn tiny edit-btn">編集</button><button class="btn tiny archive-btn">履歴へ</button></div></div>`).join(""):`<div class="empty">進行中なし</div>`;
     hist.innerHTML=`<div class="history-title">過去リスト<span class="badge">${b.history.length}</span></div>`+(b.history.length?b.history.map(x=>`<div class="item history-item"><div class="item-main">${esc(x.text)}</div><div class="item-meta">${esc(x.date)} ／ ${esc(x.type)}</div></div>`).join(""):`<div class="empty">履歴なし</div>`);
     el.querySelectorAll(".edit-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id,item=b.active.find(x=>x.id===id);if(!item)return;const next=prompt("内容を編集",item.text);if(next===null||!next.trim())return;history(b,item.text,"変更前");item.text=next.trim();item.date=now();save();renderAll()});
     el.querySelectorAll(".archive-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id,i=b.active.findIndex(x=>x.id===id);if(i<0)return;const item=b.active.splice(i,1)[0];history(b,item.text,"履歴へ移動");save();renderAll()});
@@ -313,10 +313,10 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
   let langEditId=null;
   function langRowHTML(x,isHistory){
     return `<div class="lang-row" data-id="${esc(x.id)}" style="display:contents">
-      <div class="lang-cell" data-label="具体的な経験・出来事">${esc(x.a||"")}</div>
-      <div class="lang-cell" data-label="そこから抽出した本質・法則">${esc(x.b||"")}</div>
-      <div class="lang-cell" data-label="他の分野への応用">${esc(x.c||"")}</div>
-      <div class="lang-cell" data-label="自分への教訓・躾け">${esc(x.d||"")}</div>
+      <div class="lang-cell" data-label="1 具体的な経験・出来事">${esc(x.a||"")}</div>
+      <div class="lang-cell" data-label="2 そこから抽出した本質・法則">${esc(x.b||"")}</div>
+      <div class="lang-cell" data-label="3 他の分野への応用">${esc(x.c||"")}</div>
+      <div class="lang-cell" data-label="4 自分への教訓・躾け">${esc(x.d||"")}</div>
       <div class="lang-tools" data-label="${isHistory?"日時":"操作"}">${isHistory?`<span class="item-meta">${esc(x.date)}</span>`:`<button type="button" class="btn tiny lang-edit">編集</button><button type="button" class="btn tiny lang-archive">履歴へ</button>`}</div>
     </div>`;
   }
