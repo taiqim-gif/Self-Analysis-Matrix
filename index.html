@@ -209,8 +209,8 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
 
   <div id="normalInputArea">
     <div class="selected-label" id="selectedLabel">選択ゾーン：最優先・成長</div>
-    <textarea id="mainInput" placeholder="ここに内容を入力"></textarea>
-    <div class="input-footer"><span class="input-help">保存(選択した表の「進行中」に追加)</span><button class="btn primary save-btn" id="saveBtn">保存</button></div>
+    <textarea id="mainInput" placeholder="入力"></textarea>
+    <div class="input-footer"><span class="input-help">保存(「進行中」に追加)</span><button class="btn primary save-btn" id="saveBtn">保存</button></div>
   </div>
 
   <div id="langInputArea" style="display:none">
@@ -243,7 +243,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
 </section>
 
 <section class="sheet">
-  <div class="sheet-head"><h1>ギャップ分析表</h1><input id="theme3" placeholder="テーマ：営業力 / 抽象思考 / 習慣力など"></div>
+  <div class="sheet-head"><h1>ギャップ分析表</h1><input id="theme3" placeholder="テーマ：営業力・抽象思考・習慣力など"></div>
   <div class="gap-table">
     <div class="gap-label">理想の状態（5年後）</div><div class="gap-content" data-section="gap" data-cell="ideal"><div class="current-list"></div><div class="history hidden"></div></div>
     <div class="gap-label">現在の状態</div><div class="gap-content" data-section="gap" data-cell="current"><div class="current-list"></div><div class="history hidden"></div></div>
@@ -323,7 +323,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
   function renderLanguage(){
     const b=bucket("language","entries");
     const rows=document.getElementById("langRows");
-    rows.innerHTML=b.active.length?b.active.map(x=>langRowHTML(x,false)).join(""):`<div class="lang-empty">進行中の項目なし</div>`;
+    rows.innerHTML=b.active.length?b.active.map(x=>langRowHTML(x,false)).join(""):`<div class="lang-empty">進行中なし</div>`;
     const histRows=document.getElementById("langHistRows"), histCount=document.getElementById("langHistCount");
     if(histCount)histCount.textContent=b.history.length;
     histRows.innerHTML=b.history.length?b.history.map(x=>langRowHTML(x,true)).join(""):`<div class="lang-empty">履歴なし</div>`;
