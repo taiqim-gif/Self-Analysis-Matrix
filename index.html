@@ -210,7 +210,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
   <div id="normalInputArea">
     <div class="selected-label" id="selectedLabel">選択ゾーン：最優先・成長</div>
     <textarea id="mainInput" placeholder="ここに内容を入力"></textarea>
-    <div class="input-footer"><span class="input-help">保存すると選択した表の「現在進行中」に追加</span><button class="btn primary save-btn" id="saveBtn">保存</button></div>
+    <div class="input-footer"><span class="input-help">保存(選択した表の「進行中」に追加)</span><button class="btn primary save-btn" id="saveBtn">保存</button></div>
   </div>
 
   <div id="langInputArea" style="display:none">
@@ -243,7 +243,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
 </section>
 
 <section class="sheet">
-  <div class="sheet-head"><h1>ギャップ分析表</h1><input id="theme3" placeholder="テーマ：営業力 / 抽象思考 / 習慣力 など"></div>
+  <div class="sheet-head"><h1>ギャップ分析表</h1><input id="theme3" placeholder="テーマ：営業力 / 抽象思考 / 習慣力など"></div>
   <div class="gap-table">
     <div class="gap-label">理想の状態（5年後）</div><div class="gap-content" data-section="gap" data-cell="ideal"><div class="current-list"></div><div class="history hidden"></div></div>
     <div class="gap-label">現在の状態</div><div class="gap-content" data-section="gap" data-cell="current"><div class="current-list"></div><div class="history hidden"></div></div>
@@ -261,7 +261,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
     <div id="langRows" style="display:contents"></div>
   </div>
   <div class="history hidden" id="langHistoryBlock">
-    <div class="history-title">過去リスト（履歴） <span class="badge" id="langHistCount">0</span></div>
+    <div class="history-title">過去リスト<span class="badge" id="langHistCount">0</span></div>
     <div class="lang-table lang-history-table">
       <div class="lang-head">具体的な経験・出来事</div><div class="lang-head">そこから抽出した本質・法則</div><div class="lang-head">他の分野への応用</div><div class="lang-head">自分への教訓・躾け</div><div class="lang-head">日時</div>
       <div id="langHistRows" style="display:contents"></div>
@@ -377,7 +377,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
   document.getElementById("historyToggleBtn").onclick=()=>setHistory(!historyShown);
   document.getElementById("exportBtn").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));a.download="自己分析バックアップ_"+new Date().toISOString().slice(0,10)+".json";a.click()};
   document.getElementById("importBtn").onclick=()=>document.getElementById("importFile").click();
-  document.getElementById("importFile").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!x||!x.cells)throw 0;data=x;save();renderAll();alert("データを復元しました。")}catch{alert("バックアップファイルを読み込めませんでした。")}e.target.value=""};
+  document.getElementById("importFile").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!x||!x.cells)throw 0;data=x;save();renderAll();alert("データ復元ＯＫ!")}catch{alert("バックアップファイルを読み込めませんでした。")}e.target.value=""};
   document.getElementById("clearBtn").onclick=()=>{if(!confirm("現在の入力・履歴をすべて削除します。よろしいですか？"))return;localStorage.removeItem(KEY);data={theme1:"",theme3:"",cells:{}};renderAll()};
 
   // ---- デザインテーマ切替（タイトル横の小さな隠れボタン） ----
