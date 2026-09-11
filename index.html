@@ -44,7 +44,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
 .tdot{width:10px;height:10px;border-radius:50%;border:1px solid rgba(0,0,0,.18);background:var(--dot);padding:0;cursor:pointer;opacity:.5;flex-shrink:0}
 .tdot:hover{opacity:.85}
 .tdot.active{opacity:1;box-shadow:0 0 0 2px rgba(0,0,0,.18)}
-.view-tabs{display:flex;gap:8px;margin-bottom:12px}
+.view-tabs{display:flex;gap:8px;margin-bottom:12px;position:sticky;top:47px;z-index:25;background:var(--bg);padding:8px 0 4px}
 .vtab{flex:1;border:2px solid var(--line);background:var(--tab-bg);color:var(--tab-text);border-radius:10px;padding:10px 6px;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit}
 .vtab.active{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}
 .view{display:none}.view.active{display:block}
@@ -105,15 +105,30 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
 .cell{min-height:260px;padding:10px 12px;border-bottom:1px solid var(--line)}.matrix .cell:nth-child(3),.matrix .cell:nth-child(5){border-right:1px solid var(--line)}.matrix>.cell:nth-last-child(-n+2){border-bottom:0}
 .matrix2{display:grid;grid-template-columns:105px 1fr 1fr;border:2px solid var(--line);border-radius:9px;overflow:hidden}.matrix2>div{border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.matrix2>div:nth-child(3n){border-right:0}
 .matrix2 .head{text-align:center;font-weight:800;padding:10px 5px;font-size:13px}.matrix2 .side{display:flex;align-items:center;justify-content:center;text-align:center;font-weight:800;white-space:pre-line;padding:8px;font-size:13px}.matrix2 .mcell{padding:10px 12px;min-height:260px}.matrix2 .bottom{border-bottom:0}
-.gap-table{border:2px solid var(--line);display:grid;grid-template-columns:210px 1fr;background:var(--card)}.gap-label,.gap-content{min-height:90px;border-bottom:1px solid var(--line)}.gap-label{border-right:1px solid var(--line);display:flex;align-items:center;padding:11px;font-weight:800;font-size:13px;background:var(--head-bg);color:var(--text)}.gap-content{padding:10px 12px}.gap-table>:nth-last-child(-n+2){border-bottom:0}
+.gap-cards{display:flex;flex-direction:column;gap:12px}
+.gap-card{border:2px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.gap-card-label{background:var(--head-bg);color:var(--text);font-weight:800;font-size:13px;padding:9px 12px;border-bottom:1px solid var(--line)}
+.gap-card .gap-content{padding:10px 12px}
+.gap-entry{border:2px solid var(--line);border-radius:10px;padding:11px 13px;background:var(--card);display:flex;flex-direction:column;gap:8px}
+.gap-entry-row{display:flex;flex-direction:column;gap:2px}
+.gap-entry-label{font-size:10px;font-weight:800;color:var(--muted)}
+.gap-entry-text{font-size:13px;white-space:pre-wrap;word-break:break-word;color:var(--text)}
+.gap-entry-text.empty-field{color:var(--muted);font-style:italic}
+.gap-entry .item-meta{font-size:10px;color:var(--muted)}
+.gap-entry .item-tools{display:flex;justify-content:flex-end;gap:5px}
+.gap-entry.editing{border-color:var(--accent)}
 .cell-head{display:flex;align-items:center;gap:7px}.cell h2{font-size:15px;margin:0;font-weight:900}.badge{display:inline-block;font-size:10px;border:1px solid var(--line);border-radius:99px;padding:1px 6px;background:var(--card);color:var(--muted);line-height:1.4}.guide{font-size:11px;color:var(--muted);margin:3px 0 7px}
 .current-list,.history{display:flex;flex-direction:column;gap:6px}.item{background:var(--card);border:1px solid var(--line);border-radius:7px;padding:7px 8px}.item-main{white-space:pre-wrap;word-break:break-word;font-size:13px;color:var(--text)}.item-meta{font-size:10px;color:var(--muted);margin-top:3px}.item-tools{display:flex;justify-content:flex-end;gap:5px;margin-top:5px}.empty{font-size:11px;color:var(--muted);padding:3px 0}
+.item.editing{border:2px solid var(--accent);padding:8px}
+.item .edit-area{display:block;width:100%;min-height:60px;resize:vertical;border:1px solid var(--line);border-radius:6px;padding:7px 8px;font-family:inherit;font-size:13px;background:var(--input-bg);color:var(--text);box-sizing:border-box}
+.btn.tiny.danger{background:#fff0f0;border-color:#d66;color:#a33}
 .history{margin-top:9px;padding-top:8px;border-top:1px dashed var(--line)}.history.hidden{display:none}.history-item{background:var(--history)}.history-title{font-size:11px;font-weight:800;margin-bottom:5px;color:var(--muted)}.footer-note{text-align:center;color:var(--muted);font-size:11px;margin-top:14px}
 @media(max-width:700px){
 .topbar-inner{align-items:flex-start;flex-direction:column;padding:8px 9px}.actions{width:100%}.actions .btn{flex:1}.container{padding:0 5px 35px}
 .input-panel{padding:10px;border-radius:10px}#mainInput{min-height:86px;font-size:16px}.input-footer{align-items:stretch}.input-help{display:none}.save-btn{width:100%;min-height:42px}
 .picker-grid.g4{grid-template-columns:52px 1fr 1fr}.p-colhead{font-size:10px;padding:5px 2px}.p-rowlabel{font-size:9px}.p-cell{font-size:11px;min-height:40px;padding:6px 3px}.gap-btn{font-size:11px;padding:6px 8px}.ptab{font-size:11px;padding:7px 2px}
 .vtab{font-size:13px;padding:9px 4px}
+.view-tabs{top:41px}
 .lang-table{grid-template-columns:1fr}
 .lang-head{display:none}
 .lang-row{display:block!important;border:1px solid var(--line);border-radius:8px;margin:0 0 8px;padding:8px;background:var(--card)}
@@ -126,14 +141,14 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
 
 .axis-top-label{margin-left:20px;font-size:11px}.axis-top-label.small{margin-left:18px;font-size:10px}.axis-left-label{font-size:10px}
 .matrix2{grid-template-columns:62px 1fr 1fr}.matrix2 .head{font-size:11px}.matrix2 .side{font-size:11px}.matrix2 .mcell{min-height:245px;padding:8px 6px}
-.gap-table{grid-template-columns:100px 1fr}.gap-label{font-size:11px;padding:7px}.gap-content{padding:7px 8px;min-height:75px}
+.gap-card-label{font-size:11px;padding:7px 9px}.gap-card .gap-content{padding:7px 8px}
 }
 </style>
 </head>
 
 <body>
 <header class="topbar"><div class="topbar-inner">
-  <div><div class="title-row"><div class="title">分析シート(3種)</div><div class="theme-dots" id="themeDots">
+  <div><div class="title-row"><div class="title">分析シート</div><div class="theme-dots" id="themeDots">
     <button type="button" class="tdot" data-theme="pastel" style="--dot:#c9b8ef" title=""></button>
     <button type="button" class="tdot" data-theme="earth" style="--dot:#8a9a5b" title=""></button>
     <button type="button" class="tdot" data-theme="braniff" style="--dot:#e8916f" title=""></button>
@@ -141,9 +156,9 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
   </div></div></div>
   <div class="actions">
     <button class="btn small" id="historyToggleBtn">履歴表示</button>
-    <button class="btn small" id="exportBtn">バックアップ</button>
+    <button class="btn small" id="exportBtn">保存</button>
     <button class="btn small" id="importBtn">復元</button>
-    <button class="btn small danger" id="clearBtn">全データ削除</button>
+    <button class="btn small danger" id="clearBtn">全削除</button>
     <input type="file" id="importFile" accept=".json" hidden>
   </div>
 </div></header>
@@ -156,7 +171,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
 
 <div id="view-input" class="view active">
 <section class="input-panel">
-  <div class="input-title">入力中</div>
+  <div class="input-title">入力</div>
   <div class="picker-tabs">
     <button type="button" class="ptab active" data-page="priority">優先度</button>
     <button type="button" class="ptab" data-page="gap">ギャップ分析</button>
@@ -168,7 +183,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
       <div class="matrix-row">
         <div class="axis-left-label small">優先度</div>
         <div class="picker-grid g4">
-          <div class="p-corner"></div><div class="p-colhead">できてない</div><div class="p-colhead">できている</div>
+          <div class="p-corner"></div><div class="p-colhead">できていない</div><div class="p-colhead">できている</div>
           <div class="p-rowlabel">高い</div>
           <button type="button" class="p-cell" data-value="priority.focus">最優先・成長</button>
           <button type="button" class="p-cell" data-value="priority.maintain">維持・強化</button>
@@ -179,46 +194,42 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
       </div>
     </div>
     <div class="picker-page" data-page="gap">
-      <div class="gap-picker">
-        <div class="gap-group-title">1 状態</div>
-        <div class="gap-group">
-          <button type="button" class="gap-btn" data-value="gap.ideal">理想</button>
-          <button type="button" class="gap-btn" data-value="gap.current">現在</button>
-        </div>
-        <div class="gap-group">
-          <span class="gap-mini-label">2 ギャップ</span>
-          <select id="gapSizeSelect" class="gap-size-select">
-            <option value="" disabled selected>選択</option>
-            <option value="大">大</option>
-            <option value="中">中</option>
-            <option value="小">小</option>
-          </select>
-          <button type="button" class="gap-btn" data-value="gap.cause">原因</button>
-        </div>
-        <div class="gap-group-title">3 行動</div>
-        <div class="gap-group">
-          <button type="button" class="gap-btn" data-value="gap.action">4 すぐやる微差の行動</button>
-          <button type="button" class="gap-btn" data-value="gap.declaration">5 自分への宣言・言い聞かせ</button>
-        </div>
-      </div>
+      <div class="lang-hint">6つの項目をまとめて1件の記録として保存します（1件＝1つながりのギャップ分析）。</div>
     </div>
     <div class="picker-page" data-page="language">
-      <div class="lang-hint">4つの項目をまとめて1件として保存</div>
+      <div class="lang-hint">4つの項目をまとめて1件の記録として保存します。</div>
     </div>
   </div>
 
   <div id="normalInputArea">
     <div class="selected-label" id="selectedLabel">選択ゾーン：最優先・成長</div>
-    <textarea id="mainInput" placeholder="ここに書く♪"></textarea>
-    <div class="input-footer"><span class="input-help">保存 「進行中」に追加</span><button class="btn primary save-btn" id="saveBtn">保存</button></div>
+    <textarea id="mainInput" placeholder="ここに内容を入力してください"></textarea>
+    <div class="input-footer"><span class="input-help">保存すると選択した表の「現在進行中」に追加されます。</span><button class="btn primary save-btn" id="saveBtn">保存</button></div>
+  </div>
+
+  <div id="gapInputArea" style="display:none">
+    <div class="lang-field"><label>理想の状態（5年後）</label><textarea id="gapIdeal"></textarea></div>
+    <div class="lang-field"><label>現在の状態</label><textarea id="gapCurrent"></textarea></div>
+    <div class="lang-field"><label>ギャップの大きさ</label>
+      <select id="gapSizeSelect" class="gap-size-select">
+        <option value="">選択</option>
+        <option value="大">大</option>
+        <option value="中">中</option>
+        <option value="小">小</option>
+      </select>
+    </div>
+    <div class="lang-field"><label>ギャップを生んでいる原因</label><textarea id="gapCause"></textarea></div>
+    <div class="lang-field"><label>すぐやる微差の行動</label><textarea id="gapAction"></textarea></div>
+    <div class="lang-field"><label>自分への宣言・言い聞かせ</label><textarea id="gapDeclaration"></textarea></div>
+    <div class="input-footer"><span class="input-help" id="gapHelp">6項目をまとめて1件として保存します。</span><button class="btn danger" id="gapDeleteBtn" style="display:none">削除</button><button class="btn primary save-btn" id="gapSaveBtn">追加</button></div>
   </div>
 
   <div id="langInputArea" style="display:none">
-    <div class="lang-field"><label>1 具体的な経験・出来事</label><textarea id="langA"></textarea></div>
-    <div class="lang-field"><label>2 そこから抽出した本質・法則</label><textarea id="langB"></textarea></div>
-    <div class="lang-field"><label>3 他の分野への応用</label><textarea id="langC"></textarea></div>
-    <div class="lang-field"><label>4 自分への教訓・躾け</label><textarea id="langD"></textarea></div>
-    <div class="input-footer"><span class="input-help" id="langHelp">4項目をまとめて1件として保存</span><button class="btn primary save-btn" id="langSaveBtn">追加</button></div>
+    <div class="lang-field"><label>具体的な経験・出来事</label><textarea id="langA"></textarea></div>
+    <div class="lang-field"><label>そこから抽出した本質・法則</label><textarea id="langB"></textarea></div>
+    <div class="lang-field"><label>他の分野への応用</label><textarea id="langC"></textarea></div>
+    <div class="lang-field"><label>自分への教訓・躾け</label><textarea id="langD"></textarea></div>
+    <div class="input-footer"><span class="input-help" id="langHelp">4項目をまとめて1件として保存します。</span><button class="btn danger" id="langDeleteBtn" style="display:none">削除</button><button class="btn primary save-btn" id="langSaveBtn">追加</button></div>
   </div>
 </section>
 </div>
@@ -231,9 +242,9 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
   <div class="matrix-row">
     <div class="axis-left-label">優先度</div>
     <div class="matrix">
-      <div class="corner"></div><div class="colhead">できてない</div><div class="colhead">できている</div>
+      <div class="corner"></div><div class="colhead">できていない</div><div class="colhead">できている</div>
       <div class="rowlabel">高い</div>
-      <div class="cell" data-section="priority" data-cell="focus"><div class="cell-head"><h2>最優先・成長</h2><span class="badge active-count">0</span></div><div class="guide">ここにエネルギーを集中／日記で徹底的に躾ける</div><div class="current-list"></div><div class="history hidden"></div></div>
+      <div class="cell" data-section="priority" data-cell="focus"><div class="cell-head"><h2>最優先・成長</h2><span class="badge active-count">0</span></div><div class="guide">ここにエネルギーを集中する／日記で徹底的に躾ける</div><div class="current-list"></div><div class="history hidden"></div></div>
       <div class="cell" data-section="priority" data-cell="maintain"><div class="cell-head"><h2>維持・強化</h2><span class="badge active-count">0</span></div><div class="guide">さらに伸ばす・習慣化する</div><div class="current-list"></div><div class="history hidden"></div></div>
       <div class="rowlabel">低い</div>
       <div class="cell" data-section="priority" data-cell="discard"><div class="cell-head"><h2>捨てる・後回し</h2><span class="badge active-count">0</span></div><div class="guide">やらないことを決める</div><div class="current-list"></div><div class="history hidden"></div></div>
@@ -243,39 +254,36 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
 </section>
 
 <section class="sheet">
-  <div class="sheet-head"><h1>ギャップ分析表</h1><input id="theme3" placeholder="テーマ：営業力・抽象思考・習慣力など"></div>
-  <div class="gap-table">
-    <div class="gap-label">理想の状態 (5年後)</div><div class="gap-content" data-section="gap" data-cell="ideal"><div class="current-list"></div><div class="history hidden"></div></div>
-    <div class="gap-label">現在の状態</div><div class="gap-content" data-section="gap" data-cell="current"><div class="current-list"></div><div class="history hidden"></div></div>
-    <div class="gap-label">ギャップの大きさ（大・中・小）</div><div class="gap-content" data-section="gap" data-cell="size"><div class="current-list"></div><div class="history hidden"></div></div>
-    <div class="gap-label">ギャップの原因</div><div class="gap-content" data-section="gap" data-cell="cause"><div class="current-list"></div><div class="history hidden"></div></div>
-    <div class="gap-label">すぐやる微差の行動</div><div class="gap-content" data-section="gap" data-cell="action"><div class="current-list"></div><div class="history hidden"></div></div>
-    <div class="gap-label">自分への宣言・言い聞かせ</div><div class="gap-content" data-section="gap" data-cell="declaration"><div class="current-list"></div><div class="history hidden"></div></div>
+  <div class="sheet-head"><h1>ギャップ分析表</h1><input id="theme3" placeholder="テーマ：営業力 / 抽象思考 / 習慣力 など"></div>
+  <div class="gap-cards" id="gapRows"></div>
+  <div class="history hidden" id="gapHistoryBlock">
+    <div class="history-title">過去リスト（履歴） <span class="badge" id="gapHistCount">0</span></div>
+    <div class="gap-cards" id="gapHistRows"></div>
   </div>
 </section>
 
 <section class="sheet">
   <div class="sheet-head"><h1>言語化・構造化シート</h1></div>
   <div class="lang-table">
-    <div class="lang-head">1 具体的な経験・出来事</div><div class="lang-head">2 そこから抽出した本質・法則</div><div class="lang-head">3 他の分野への応用</div><div class="lang-head">4 自分への教訓・躾け</div><div class="lang-head">操作</div>
+    <div class="lang-head">具体的な経験・出来事</div><div class="lang-head">そこから抽出した本質・法則</div><div class="lang-head">他の分野への応用</div><div class="lang-head">自分への教訓・躾け</div><div class="lang-head">操作</div>
     <div id="langRows" style="display:contents"></div>
   </div>
   <div class="history hidden" id="langHistoryBlock">
-    <div class="history-title">過去リスト<span class="badge" id="langHistCount">0</span></div>
+    <div class="history-title">過去リスト（履歴） <span class="badge" id="langHistCount">0</span></div>
     <div class="lang-table lang-history-table">
-      <div class="lang-head">1 具体的な経験・出来事</div><div class="lang-head">2 そこから抽出した本質・法則</div><div class="lang-head">3 他の分野への応用</div><div class="lang-head">4 自分への教訓・躾け</div><div class="lang-head">日時</div>
+      <div class="lang-head">具体的な経験・出来事</div><div class="lang-head">そこから抽出した本質・法則</div><div class="lang-head">他の分野への応用</div><div class="lang-head">自分への教訓・躾け</div><div class="lang-head">日時</div>
       <div id="langHistRows" style="display:contents"></div>
     </div>
   </div>
 </section>
 </div>
-<div class="footer-note">入力内容はこの端末・ブラウザに自動保存</div>
+<div class="footer-note">入力内容はこの端末・このブラウザに自動保存されます。</div>
 </main>
 
 <script>
 (() => {
   const KEY="self_analysis_matrix_v1";
-  const LABELS={"priority.focus":"最優先・成長","priority.maintain":"維持・強化","priority.discard":"捨てる・後回し","priority.spare":"余裕・確認","gap.ideal":"理想の状態（5年後）","gap.current":"現在の状態","gap.size":"ギャップの大きさ","gap.cause":"ギャップを生んでいる原因","gap.action":"すぐやる微差の行動","gap.declaration":"自分への宣言・言い聞かせ"};
+  const LABELS={"priority.focus":"最優先・成長","priority.maintain":"維持・強化","priority.discard":"捨てる・後回し","priority.spare":"余裕・確認"};
   let data=JSON.parse(localStorage.getItem(KEY)||"null")||{theme1:"",theme3:"",cells:{}};
   const now=()=>new Date().toLocaleString("ja-JP",{year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
   const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -297,49 +305,132 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
     if(data.cells.discipline)delete data.cells.discipline;
     data.migratedPriority=true;save();
   })();
+  (function migrateGapEntries(){
+    if(data.migratedGapEntries)return;
+    const fieldKeys=["ideal","current","size","cause","action","declaration"];
+    const old=data.cells.gap;
+    if(old){
+      const nb=bucket("gap","entries");
+      fieldKeys.forEach(key=>{
+        const fb=old[key];if(!fb)return;
+        (fb.active||[]).forEach(it=>{const e={id:it.id||crypto.randomUUID(),ideal:"",current:"",size:"",cause:"",action:"",declaration:"",date:it.date};e[key]=it.text;nb.active.push(e)});
+        (fb.history||[]).forEach(it=>{const e={id:it.id||crypto.randomUUID(),ideal:"",current:"",size:"",cause:"",action:"",declaration:"",date:it.date};e[key]=it.text;nb.history.push(e)});
+        delete old[key];
+      });
+    }
+    data.migratedGapEntries=true;save();
+  })();
   function history(b,text,type){b.history.unshift({id:crypto.randomUUID(),text,date:now(),type})}
+  const editingIds=new Set();
   function renderCell(el){
     const b=bucket(el.dataset.section,el.dataset.cell), cur=el.querySelector(".current-list"), hist=el.querySelector(".history"), count=el.querySelector(".active-count");
     if(count)count.textContent=b.active.length;
-    cur.innerHTML=b.active.length?b.active.map(x=>`<div class="item" data-id="${esc(x.id)}"><div class="item-main">${esc(x.text)}</div><div class="item-meta">更新：${esc(x.date)}</div><div class="item-tools"><button class="btn tiny edit-btn">編集</button><button class="btn tiny archive-btn">履歴へ</button></div></div>`).join(""):`<div class="empty">進行中なし</div>`;
-    hist.innerHTML=`<div class="history-title">過去リスト<span class="badge">${b.history.length}</span></div>`+(b.history.length?b.history.map(x=>`<div class="item history-item"><div class="item-main">${esc(x.text)}</div><div class="item-meta">${esc(x.date)} ／ ${esc(x.type)}</div></div>`).join(""):`<div class="empty">履歴なし</div>`);
-    el.querySelectorAll(".edit-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id,item=b.active.find(x=>x.id===id);if(!item)return;const next=prompt("内容を編集",item.text);if(next===null||!next.trim())return;history(b,item.text,"変更前");item.text=next.trim();item.date=now();save();renderAll()});
+    cur.innerHTML=b.active.length?b.active.map(x=>editingIds.has(x.id)?
+      `<div class="item editing" data-id="${esc(x.id)}"><textarea class="edit-area">${esc(x.text)}</textarea><div class="item-tools"><button class="btn tiny cancel-btn">キャンセル</button><button class="btn tiny danger delete-btn">削除</button><button class="btn tiny primary update-btn">更新</button></div></div>`
+      :`<div class="item" data-id="${esc(x.id)}"><div class="item-main">${esc(x.text)}</div><div class="item-meta">更新：${esc(x.date)}</div><div class="item-tools"><button class="btn tiny edit-btn">編集</button><button class="btn tiny archive-btn">履歴へ</button></div></div>`
+    ).join(""):`<div class="empty">現在進行中の項目はありません</div>`;
+    hist.innerHTML=`<div class="history-title">過去リスト（履歴） <span class="badge">${b.history.length}</span></div>`+(b.history.length?b.history.map(x=>`<div class="item history-item"><div class="item-main">${esc(x.text)}</div><div class="item-meta">${esc(x.date)} ／ ${esc(x.type)}</div></div>`).join(""):`<div class="empty">履歴はありません</div>`);
+    el.querySelectorAll(".edit-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id;editingIds.add(id);renderAll()});
+    el.querySelectorAll(".cancel-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id;editingIds.delete(id);renderAll()});
+    el.querySelectorAll(".update-btn").forEach(btn=>btn.onclick=()=>{const row=btn.closest(".item"),id=row.dataset.id,item=b.active.find(x=>x.id===id);if(!item)return;const next=row.querySelector(".edit-area").value;if(!next.trim())return;history(b,item.text,"変更前");item.text=next.trim();item.date=now();editingIds.delete(id);save();renderAll()});
+    el.querySelectorAll(".delete-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id;if(!confirm("この項目を削除します。よろしいですか？"))return;const i=b.active.findIndex(x=>x.id===id);if(i>=0)b.active.splice(i,1);editingIds.delete(id);save();renderAll()});
     el.querySelectorAll(".archive-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id,i=b.active.findIndex(x=>x.id===id);if(i<0)return;const item=b.active.splice(i,1)[0];history(b,item.text,"履歴へ移動");save();renderAll()});
   }
   function save(){localStorage.setItem(KEY,JSON.stringify(data))}
-  function renderAll(){document.getElementById("theme1").value=data.theme1||"";document.getElementById("theme3").value=data.theme3||"";document.querySelectorAll("[data-section][data-cell]").forEach(renderCell);renderLanguage();updateLabel()}
+  function renderAll(){document.getElementById("theme1").value=data.theme1||"";document.getElementById("theme3").value=data.theme3||"";document.querySelectorAll("[data-section][data-cell]").forEach(renderCell);renderLanguage();renderGap();updateLabel()}
 
   // ---- 言語化・構造化シート ----
   let langEditId=null;
   function langRowHTML(x,isHistory){
     return `<div class="lang-row" data-id="${esc(x.id)}" style="display:contents">
-      <div class="lang-cell" data-label="1 具体的な経験・出来事">${esc(x.a||"")}</div>
-      <div class="lang-cell" data-label="2 そこから抽出した本質・法則">${esc(x.b||"")}</div>
-      <div class="lang-cell" data-label="3 他の分野への応用">${esc(x.c||"")}</div>
-      <div class="lang-cell" data-label="4 自分への教訓・躾け">${esc(x.d||"")}</div>
+      <div class="lang-cell" data-label="具体的な経験・出来事">${esc(x.a||"")}</div>
+      <div class="lang-cell" data-label="そこから抽出した本質・法則">${esc(x.b||"")}</div>
+      <div class="lang-cell" data-label="他の分野への応用">${esc(x.c||"")}</div>
+      <div class="lang-cell" data-label="自分への教訓・躾け">${esc(x.d||"")}</div>
       <div class="lang-tools" data-label="${isHistory?"日時":"操作"}">${isHistory?`<span class="item-meta">${esc(x.date)}</span>`:`<button type="button" class="btn tiny lang-edit">編集</button><button type="button" class="btn tiny lang-archive">履歴へ</button>`}</div>
     </div>`;
   }
+
+  // ---- ギャップ分析表（6項目1セット） ----
+  let gapEditId=null;
+  const GAP_FIELDS=[["ideal","理想の状態（5年後）","gapIdeal"],["current","現在の状態","gapCurrent"],["size","ギャップの大きさ","gapSizeSelect"],["cause","ギャップを生んでいる原因","gapCause"],["action","すぐやる微差の行動","gapAction"],["declaration","自分への宣言・言い聞かせ","gapDeclaration"]];
+  function gapEntryHTML(x,isHistory){
+    const rows=GAP_FIELDS.map(([key,label])=>{
+      const v=x[key]||"";
+      return `<div class="gap-entry-row"><span class="gap-entry-label">${esc(label)}</span><div class="gap-entry-text${v?"":" empty-field"}">${v?esc(v):"（未記入）"}</div></div>`;
+    }).join("");
+    const meta=isHistory?`<div class="item-meta">${esc(x.date)}</div>`:`<div class="item-meta">更新：${esc(x.date)}</div><div class="item-tools"><button type="button" class="btn tiny gap-edit">編集</button><button type="button" class="btn tiny gap-archive">履歴へ</button></div>`;
+    return `<div class="gap-entry" data-id="${esc(x.id)}">${rows}${meta}</div>`;
+  }
+  function renderGap(){
+    const b=bucket("gap","entries");
+    const rows=document.getElementById("gapRows");
+    rows.innerHTML=b.active.length?b.active.map(x=>gapEntryHTML(x,false)).join(""):`<div class="empty">現在進行中の項目はありません</div>`;
+    const histRows=document.getElementById("gapHistRows"), histCount=document.getElementById("gapHistCount");
+    if(histCount)histCount.textContent=b.history.length;
+    histRows.innerHTML=b.history.length?b.history.map(x=>gapEntryHTML(x,true)).join(""):`<div class="empty">履歴はありません</div>`;
+    rows.querySelectorAll(".gap-edit").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".gap-entry").dataset.id,item=b.active.find(x=>x.id===id);if(!item)return;startEditGap(item)});
+    rows.querySelectorAll(".gap-archive").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".gap-entry").dataset.id,i=b.active.findIndex(x=>x.id===id);if(i<0)return;const item=b.active.splice(i,1)[0];item.date=now();b.history.unshift(item);if(gapEditId===item.id)cancelEditGap();save();renderAll()});
+  }
+  function startEditGap(item){
+    gapEditId=item.id;
+    document.getElementById("gapIdeal").value=item.ideal||"";document.getElementById("gapCurrent").value=item.current||"";document.getElementById("gapSizeSelect").value=item.size||"";
+    document.getElementById("gapCause").value=item.cause||"";document.getElementById("gapAction").value=item.action||"";document.getElementById("gapDeclaration").value=item.declaration||"";
+    document.getElementById("gapSaveBtn").textContent="更新";document.getElementById("gapHelp").textContent="編集中：内容を直して「更新」を押してください。";
+    document.getElementById("gapDeleteBtn").style.display="";
+    switchVtab("input");switchPtab("gap");document.getElementById("gapIdeal").focus();
+  }
+  function cancelEditGap(){
+    gapEditId=null;document.getElementById("gapSaveBtn").textContent="追加";document.getElementById("gapHelp").textContent="6項目をまとめて1件として保存します。";
+    document.getElementById("gapDeleteBtn").style.display="none";
+    ["gapIdeal","gapCurrent","gapCause","gapAction","gapDeclaration"].forEach(id=>document.getElementById(id).value="");
+    document.getElementById("gapSizeSelect").value="";
+  }
+  document.getElementById("gapDeleteBtn").onclick=()=>{
+    if(!gapEditId)return;
+    if(!confirm("この項目を削除します。よろしいですか？"))return;
+    const b=bucket("gap","entries"),i=b.active.findIndex(x=>x.id===gapEditId);
+    if(i>=0)b.active.splice(i,1);
+    cancelEditGap();save();renderAll();
+  };
+  document.getElementById("gapSaveBtn").onclick=()=>{
+    const ideal=document.getElementById("gapIdeal").value.trim(),cur=document.getElementById("gapCurrent").value.trim(),size=document.getElementById("gapSizeSelect").value,cause=document.getElementById("gapCause").value.trim(),action=document.getElementById("gapAction").value.trim(),declaration=document.getElementById("gapDeclaration").value.trim();
+    if(!ideal&&!cur&&!size&&!cause&&!action&&!declaration){document.getElementById("gapIdeal").focus();return}
+    const b=bucket("gap","entries");
+    if(gapEditId){const item=b.active.find(x=>x.id===gapEditId);if(item){item.ideal=ideal;item.current=cur;item.size=size;item.cause=cause;item.action=action;item.declaration=declaration;item.date=now()}cancelEditGap()}
+    else{b.active.push({id:crypto.randomUUID(),ideal,current:cur,size,cause,action,declaration,date:now()});cancelEditGap()}
+    save();renderAll();
+  };
+
   function renderLanguage(){
     const b=bucket("language","entries");
     const rows=document.getElementById("langRows");
-    rows.innerHTML=b.active.length?b.active.map(x=>langRowHTML(x,false)).join(""):`<div class="lang-empty">進行中なし</div>`;
+    rows.innerHTML=b.active.length?b.active.map(x=>langRowHTML(x,false)).join(""):`<div class="lang-empty">現在進行中の項目はありません</div>`;
     const histRows=document.getElementById("langHistRows"), histCount=document.getElementById("langHistCount");
     if(histCount)histCount.textContent=b.history.length;
-    histRows.innerHTML=b.history.length?b.history.map(x=>langRowHTML(x,true)).join(""):`<div class="lang-empty">履歴なし</div>`;
+    histRows.innerHTML=b.history.length?b.history.map(x=>langRowHTML(x,true)).join(""):`<div class="lang-empty">履歴はありません</div>`;
     rows.querySelectorAll(".lang-edit").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".lang-row").dataset.id,item=b.active.find(x=>x.id===id);if(!item)return;startEditLang(item)});
     rows.querySelectorAll(".lang-archive").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".lang-row").dataset.id,i=b.active.findIndex(x=>x.id===id);if(i<0)return;const item=b.active.splice(i,1)[0];item.date=now();b.history.unshift(item);if(langEditId===item.id)cancelEditLang();save();renderAll()});
   }
   function startEditLang(item){
     langEditId=item.id;
     document.getElementById("langA").value=item.a||"";document.getElementById("langB").value=item.b||"";document.getElementById("langC").value=item.c||"";document.getElementById("langD").value=item.d||"";
-    document.getElementById("langSaveBtn").textContent="更新";document.getElementById("langHelp").textContent="編集中：内容を直して「更新」";
-    document.getElementById("langA").focus();
+    document.getElementById("langSaveBtn").textContent="更新";document.getElementById("langHelp").textContent="編集中：内容を直して「更新」を押してください。";
+    document.getElementById("langDeleteBtn").style.display="";
+    switchVtab("input");switchPtab("language");document.getElementById("langA").focus();
   }
   function cancelEditLang(){
-    langEditId=null;document.getElementById("langSaveBtn").textContent="追加";document.getElementById("langHelp").textContent="4項目をまとめて1件として保存";
+    langEditId=null;document.getElementById("langSaveBtn").textContent="追加";document.getElementById("langHelp").textContent="4項目をまとめて1件として保存します。";
+    document.getElementById("langDeleteBtn").style.display="none";
     ["langA","langB","langC","langD"].forEach(id=>document.getElementById(id).value="");
   }
+  document.getElementById("langDeleteBtn").onclick=()=>{
+    if(!langEditId)return;
+    if(!confirm("この項目を削除します。よろしいですか？"))return;
+    const b=bucket("language","entries"),i=b.active.findIndex(x=>x.id===langEditId);
+    if(i>=0)b.active.splice(i,1);
+    cancelEditLang();save();renderAll();
+  };
   document.getElementById("langSaveBtn").onclick=()=>{
     const a=document.getElementById("langA").value.trim(),b2=document.getElementById("langB").value.trim(),c=document.getElementById("langC").value.trim(),d=document.getElementById("langD").value.trim();
     if(!a&&!b2&&!c&&!d){document.getElementById("langA").focus();return}
@@ -351,23 +442,25 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
 
   let selectedKey="priority.focus";
   function updateLabel(){document.getElementById("selectedLabel").textContent="選択ゾーン："+LABELS[selectedKey]}
-  function selectKey(key){selectedKey=key;document.querySelectorAll(".p-cell,.gap-btn").forEach(b=>b.classList.toggle("active",b.dataset.value===key));updateLabel()}
-  document.querySelectorAll(".p-cell,.gap-btn").forEach(b=>b.onclick=()=>{selectKey(b.dataset.value);document.getElementById("mainInput").focus()});
+  function selectKey(key){selectedKey=key;document.querySelectorAll(".p-cell").forEach(b=>b.classList.toggle("active",b.dataset.value===key));updateLabel()}
+  document.querySelectorAll(".p-cell").forEach(b=>b.onclick=()=>{selectKey(b.dataset.value);document.getElementById("mainInput").focus()});
+  function switchPtab(page){
+    document.querySelectorAll(".ptab").forEach(x=>x.classList.toggle("active",x.dataset.page===page));
+    document.querySelectorAll(".picker-page").forEach(p=>p.classList.toggle("active",p.dataset.page===page));
+    document.getElementById("normalInputArea").style.display=page==="priority"?"":"none";
+    document.getElementById("gapInputArea").style.display=page==="gap"?"":"none";
+    document.getElementById("langInputArea").style.display=page==="language"?"":"none";
+  }
+  function switchVtab(view){
+    document.querySelectorAll(".vtab").forEach(x=>x.classList.toggle("active",x.dataset.view===view));
+    document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id==="view-"+view));
+  }
   document.querySelectorAll(".ptab").forEach(t=>t.onclick=()=>{
-    document.querySelectorAll(".ptab").forEach(x=>x.classList.remove("active"));
-    t.classList.add("active");
-    document.querySelectorAll(".picker-page").forEach(p=>p.classList.toggle("active",p.dataset.page===t.dataset.page));
-    const isLang=t.dataset.page==="language";
-    document.getElementById("normalInputArea").style.display=isLang?"none":"";
-    document.getElementById("langInputArea").style.display=isLang?"":"none";
-    if(isLang)document.getElementById("langA").focus();
+    switchPtab(t.dataset.page);
+    if(t.dataset.page==="gap")document.getElementById("gapIdeal").focus();
+    if(t.dataset.page==="language")document.getElementById("langA").focus();
   });
-  document.querySelectorAll(".vtab").forEach(t=>t.onclick=()=>{
-    document.querySelectorAll(".vtab").forEach(x=>x.classList.remove("active"));
-    t.classList.add("active");
-    document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id==="view-"+t.dataset.view));
-  });
-  document.getElementById("gapSizeSelect").onchange=e=>{const v=e.target.value;if(!v)return;bucket("gap","size").active.push({id:crypto.randomUUID(),text:v,date:now()});save();renderAll();document.getElementById("gapSizeSelect").value=""};
+  document.querySelectorAll(".vtab").forEach(t=>t.onclick=()=>switchVtab(t.dataset.view));
   selectKey(selectedKey);
   document.getElementById("saveBtn").onclick=()=>{const k=selectedKey,t=document.getElementById("mainInput"),text=t.value.trim();if(!text){t.focus();return}const [s,c]=k.split(".");bucket(s,c).active.push({id:crypto.randomUUID(),text,date:now()});save();t.value="";renderAll();t.focus()};
   document.getElementById("mainInput").onkeydown=e=>{if((e.ctrlKey||e.metaKey)&&e.key==="Enter"){e.preventDefault();document.getElementById("saveBtn").click()}};
@@ -377,7 +470,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
   document.getElementById("historyToggleBtn").onclick=()=>setHistory(!historyShown);
   document.getElementById("exportBtn").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}));a.download="自己分析バックアップ_"+new Date().toISOString().slice(0,10)+".json";a.click()};
   document.getElementById("importBtn").onclick=()=>document.getElementById("importFile").click();
-  document.getElementById("importFile").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!x||!x.cells)throw 0;data=x;save();renderAll();alert("データ復元ＯＫ!")}catch{alert("バックアップファイルを読み込めませんでした。")}e.target.value=""};
+  document.getElementById("importFile").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!x||!x.cells)throw 0;data=x;save();renderAll();alert("データを復元しました。")}catch{alert("バックアップファイルを読み込めませんでした。")}e.target.value=""};
   document.getElementById("clearBtn").onclick=()=>{if(!confirm("現在の入力・履歴をすべて削除します。よろしいですか？"))return;localStorage.removeItem(KEY);data={theme1:"",theme3:"",cells:{}};renderAll()};
 
   // ---- デザインテーマ切替（タイトル横の小さな隠れボタン） ----
