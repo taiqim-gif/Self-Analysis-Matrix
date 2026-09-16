@@ -328,16 +328,17 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
     const b=bucket(el.dataset.section,el.dataset.cell), cur=el.querySelector(".current-list"), hist=el.querySelector(".history"), count=el.querySelector(".active-count");
     if(count)count.textContent=b.active.length;
     cur.innerHTML=b.active.length?b.active.map(x=>editingIds.has(x.id)?
-      `<div class="item editing" data-id="${esc(x.id)}"><textarea class="edit-area">${esc(x.text)}</textarea><div class="item-tools"><button class="btn tiny cancel-btn">キャンセル</button><button class="btn tiny danger delete-btn"><span class="full">削除</span><span class="short">削</span></button><button class="btn tiny primary update-btn">更新</button></div></div>`
-      :`<div class="item" data-id="${esc(x.id)}"><div class="item-main">${esc(x.text)}</div><div class="item-meta">更新：${esc(x.date)}</div><div class="item-tools"><button class="btn tiny edit-btn"><span class="full">編集</span><span class="short">編</span></button><button class="btn tiny archive-btn"><span class="full">履歴へ</span><span class="short">履</span></button></div></div>`
+      `<div class="item editing" data-id="${esc(x.id)}"><textarea class="edit-area">${esc(x.text)}</textarea><div class="item-meta">更新：${esc(x.date)}</div><div class="item-tools"><button class="btn tiny cancel-btn">キャンセル</button><button class="btn tiny danger delete-btn"><span class="full">削除</span><span class="short">削</span></button><button class="btn tiny primary update-btn">更新</button></div></div>`
+      :`<div class="item" data-id="${esc(x.id)}"><div class="item-main">${esc(x.text)}</div><div class="item-tools"><button class="btn tiny edit-btn"><span class="full">編集</span><span class="short">編</span></button><button class="btn tiny archive-btn"><span class="full">履歴へ</span><span class="short">履</span></button><button class="btn tiny danger delete-btn"><span class="full">削除</span><span class="short">削</span></button></div></div>`
     ).join(""):`<div class="empty">現在進行中の項目はありません</div>`;
-    hist.innerHTML=`<div class="history-title">過去リスト（履歴） <span class="badge">${b.history.length}</span></div>`+(b.history.length?b.history.map(x=>`<div class="item history-item" data-id="${esc(x.id)}"><div class="item-main">${esc(x.text)}</div><div class="item-meta">${esc(x.date)} ／ ${esc(x.type)}</div><div class="item-tools"><button class="btn tiny restore-btn"><span class="full">進行中に戻す</span><span class="short">戻</span></button></div></div>`).join(""):`<div class="empty">履歴はありません</div>`);
+    hist.innerHTML=`<div class="history-title">過去リスト（履歴） <span class="badge">${b.history.length}</span></div>`+(b.history.length?b.history.map(x=>`<div class="item history-item" data-id="${esc(x.id)}"><div class="item-main">${esc(x.text)}</div><div class="item-meta">${esc(x.date)} ／ ${esc(x.type)}</div><div class="item-tools"><button class="btn tiny danger hist-delete-btn"><span class="full">削除</span><span class="short">削</span></button><button class="btn tiny restore-btn"><span class="full">進行中に戻す</span><span class="short">戻</span></button></div></div>`).join(""):`<div class="empty">履歴はありません</div>`);
     el.querySelectorAll(".edit-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id;editingIds.add(id);renderAll()});
     el.querySelectorAll(".cancel-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id;editingIds.delete(id);renderAll()});
     el.querySelectorAll(".update-btn").forEach(btn=>btn.onclick=()=>{const row=btn.closest(".item"),id=row.dataset.id,item=b.active.find(x=>x.id===id);if(!item)return;const next=row.querySelector(".edit-area").value;if(!next.trim())return;history(b,item.text,"変更前");item.text=next.trim();item.date=now();editingIds.delete(id);save();renderAll()});
     el.querySelectorAll(".delete-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id;if(!confirm("この項目を削除します。よろしいですか？"))return;const i=b.active.findIndex(x=>x.id===id);if(i>=0)b.active.splice(i,1);editingIds.delete(id);save();renderAll()});
     el.querySelectorAll(".archive-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id,i=b.active.findIndex(x=>x.id===id);if(i<0)return;const item=b.active.splice(i,1)[0];history(b,item.text,"履歴へ移動");save();renderAll()});
     el.querySelectorAll(".restore-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id,i=b.history.findIndex(x=>x.id===id);if(i<0)return;const item=b.history.splice(i,1)[0];b.active.push({id:item.id,text:item.text,date:now()});save();renderAll()});
+    el.querySelectorAll(".hist-delete-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id;if(!confirm("履歴からこの項目を完全に削除します。よろしいですか？"))return;const i=b.history.findIndex(x=>x.id===id);if(i>=0)b.history.splice(i,1);save();renderAll()});
   }
   function save(){localStorage.setItem(KEY,JSON.stringify(data))}
   function renderAll(){document.getElementById("theme1").value=data.theme1||"";document.getElementById("theme3").value=data.theme3||"";document.querySelectorAll("[data-section][data-cell]").forEach(renderCell);renderLanguage();renderGap();updateLabel()}
@@ -350,7 +351,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
       <div class="lang-cell" data-label="そこから抽出した本質・法則">${esc(x.b||"")}</div>
       <div class="lang-cell" data-label="他の分野への応用">${esc(x.c||"")}</div>
       <div class="lang-cell" data-label="自分への教訓・躾け">${esc(x.d||"")}</div>
-      <div class="lang-tools" data-label="${isHistory?"日時":"操作"}">${isHistory?`<span class="item-meta">${esc(x.date)}</span><button type="button" class="btn tiny lang-restore"><span class="full">戻す</span><span class="short">戻</span></button>`:`<button type="button" class="btn tiny lang-edit"><span class="full">編集</span><span class="short">編</span></button><button type="button" class="btn tiny lang-archive"><span class="full">履歴へ</span><span class="short">履</span></button>`}</div>
+      <div class="lang-tools" data-label="${isHistory?"日時":"操作"}">${isHistory?`<span class="item-meta">${esc(x.date)}</span><button type="button" class="btn tiny danger lang-hist-delete"><span class="full">削除</span><span class="short">削</span></button><button type="button" class="btn tiny lang-restore"><span class="full">戻す</span><span class="short">戻</span></button>`:`<button type="button" class="btn tiny lang-edit"><span class="full">編集</span><span class="short">編</span></button><button type="button" class="btn tiny lang-archive"><span class="full">履歴へ</span><span class="short">履</span></button><button type="button" class="btn tiny danger lang-delete"><span class="full">削除</span><span class="short">削</span></button>`}</div>
     </div>`;
   }
 
@@ -362,7 +363,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
       const v=x[key]||"";
       return `<div class="gap-entry-row"><span class="gap-entry-label">${esc(label)}</span><div class="gap-entry-text${v?"":" empty-field"}">${v?esc(v):"（未記入）"}</div></div>`;
     }).join("");
-    const meta=isHistory?`<div class="item-meta">${esc(x.date)}</div><div class="item-tools"><button type="button" class="btn tiny gap-restore"><span class="full">進行中に戻す</span><span class="short">戻</span></button></div>`:`<div class="item-meta">更新：${esc(x.date)}</div><div class="item-tools"><button type="button" class="btn tiny gap-edit"><span class="full">編集</span><span class="short">編</span></button><button type="button" class="btn tiny gap-archive"><span class="full">履歴へ</span><span class="short">履</span></button></div>`;
+    const meta=isHistory?`<div class="item-meta">${esc(x.date)}</div><div class="item-tools"><button type="button" class="btn tiny danger gap-hist-delete"><span class="full">削除</span><span class="short">削</span></button><button type="button" class="btn tiny gap-restore"><span class="full">進行中に戻す</span><span class="short">戻</span></button></div>`:`<div class="item-meta">更新：${esc(x.date)}</div><div class="item-tools"><button type="button" class="btn tiny gap-edit"><span class="full">編集</span><span class="short">編</span></button><button type="button" class="btn tiny gap-archive"><span class="full">履歴へ</span><span class="short">履</span></button><button type="button" class="btn tiny danger gap-delete"><span class="full">削除</span><span class="short">削</span></button></div>`;
     return `<div class="gap-entry" data-id="${esc(x.id)}">${rows}${meta}</div>`;
   }
   function renderGap(){
@@ -374,7 +375,9 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
     histRows.innerHTML=b.history.length?b.history.map(x=>gapEntryHTML(x,true)).join(""):`<div class="empty">履歴はありません</div>`;
     rows.querySelectorAll(".gap-edit").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".gap-entry").dataset.id,item=b.active.find(x=>x.id===id);if(!item)return;startEditGap(item)});
     rows.querySelectorAll(".gap-archive").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".gap-entry").dataset.id,i=b.active.findIndex(x=>x.id===id);if(i<0)return;const item=b.active.splice(i,1)[0];item.date=now();b.history.unshift(item);if(gapEditId===item.id)cancelEditGap();save();renderAll()});
+    rows.querySelectorAll(".gap-delete").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".gap-entry").dataset.id;if(!confirm("この項目を削除します。よろしいですか？"))return;const i=b.active.findIndex(x=>x.id===id);if(i>=0)b.active.splice(i,1);if(gapEditId===id)cancelEditGap();save();renderAll()});
     histRows.querySelectorAll(".gap-restore").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".gap-entry").dataset.id,i=b.history.findIndex(x=>x.id===id);if(i<0)return;const item=b.history.splice(i,1)[0];item.date=now();b.active.push(item);save();renderAll()});
+    histRows.querySelectorAll(".gap-hist-delete").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".gap-entry").dataset.id;if(!confirm("履歴からこの項目を完全に削除します。よろしいですか？"))return;const i=b.history.findIndex(x=>x.id===id);if(i>=0)b.history.splice(i,1);save();renderAll()});
   }
   function startEditGap(item){
     gapEditId=item.id;
@@ -415,7 +418,9 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
     histRows.innerHTML=b.history.length?b.history.map(x=>langRowHTML(x,true)).join(""):`<div class="lang-empty">履歴はありません</div>`;
     rows.querySelectorAll(".lang-edit").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".lang-row").dataset.id,item=b.active.find(x=>x.id===id);if(!item)return;startEditLang(item)});
     rows.querySelectorAll(".lang-archive").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".lang-row").dataset.id,i=b.active.findIndex(x=>x.id===id);if(i<0)return;const item=b.active.splice(i,1)[0];item.date=now();b.history.unshift(item);if(langEditId===item.id)cancelEditLang();save();renderAll()});
+    rows.querySelectorAll(".lang-delete").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".lang-row").dataset.id;if(!confirm("この項目を削除します。よろしいですか？"))return;const i=b.active.findIndex(x=>x.id===id);if(i>=0)b.active.splice(i,1);if(langEditId===id)cancelEditLang();save();renderAll()});
     histRows.querySelectorAll(".lang-restore").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".lang-row").dataset.id,i=b.history.findIndex(x=>x.id===id);if(i<0)return;const item=b.history.splice(i,1)[0];item.date=now();b.active.push(item);save();renderAll()});
+    histRows.querySelectorAll(".lang-hist-delete").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".lang-row").dataset.id;if(!confirm("履歴からこの項目を完全に削除します。よろしいですか？"))return;const i=b.history.findIndex(x=>x.id===id);if(i>=0)b.history.splice(i,1);save();renderAll()});
   }
   function startEditLang(item){
     langEditId=item.id;
