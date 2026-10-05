@@ -121,6 +121,24 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
 .cell-head{display:flex;align-items:center;gap:7px}.cell h2{font-size:15px;margin:0;font-weight:900}.badge{display:inline-block;font-size:10px;border:1px solid var(--line);border-radius:99px;padding:1px 6px;background:var(--card);color:var(--muted);line-height:1.4}.guide{font-size:11px;color:var(--muted);margin:3px 0 7px}
 .current-list,.history{display:flex;flex-direction:column;gap:6px}.item{background:var(--card);border:1px solid var(--line);border-radius:7px;padding:7px 8px}.item-main{white-space:pre-wrap;word-break:break-word;font-size:13px;color:var(--text)}.item-meta{font-size:10px;color:var(--muted);margin-top:3px}.item-tools{display:flex;justify-content:flex-end;gap:5px;margin-top:5px}.empty{font-size:11px;color:var(--muted);padding:3px 0}
 .item.editing{border:2px solid var(--accent);padding:8px}
+.item{-webkit-touch-callout:none}
+.item:not(.editing) .item-main{-webkit-user-select:none;user-select:none;cursor:pointer}
+.item .item-tools{display:none}
+.item.show-tools .item-tools,.item.editing .item-tools{display:flex}
+.item.show-tools{border:2px solid var(--accent);padding:6px 7px}
+.item.flash{animation:itemflash 1.8s}
+@keyframes itemflash{0%,100%{box-shadow:0 0 0 0 transparent}20%,60%{box-shadow:0 0 0 4px var(--accent)}}
+.item .edit-kw{display:block;width:100%;box-sizing:border-box;margin-top:6px;border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-family:inherit;font-size:12px;background:var(--input-bg);color:var(--text)}
+.hint-line{font-size:10px;color:var(--muted);text-align:center;margin:0 0 6px}
+.jump-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:flex-end;justify-content:center;z-index:60}
+.jump-overlay.open{display:flex}
+.jump-box{background:var(--card);color:var(--text);width:100%;max-width:520px;border-radius:14px 14px 0 0;padding:14px;max-height:70vh;overflow:auto;border:2px solid var(--line);box-sizing:border-box}
+.jump-title{font-size:12px;font-weight:800;color:var(--muted);margin-bottom:8px}
+.jump-opt{display:block;width:100%;text-align:left;margin-bottom:6px;padding:10px 12px;font-size:13px}
+.jump-foot{display:flex;justify-content:space-between;gap:8px;margin-top:6px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--text);color:var(--card);padding:8px 14px;border-radius:99px;font-size:12px;z-index:70;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+
 .item .edit-area{display:block;width:100%;min-height:60px;resize:vertical;border:1px solid var(--line);border-radius:6px;padding:7px 8px;font-family:inherit;font-size:13px;background:var(--input-bg);color:var(--text);box-sizing:border-box}
 .btn.tiny.danger{background:#fff0f0;border-color:#d66;color:#a33}
 .history{margin-top:9px;padding-top:8px;border-top:1px dashed var(--line)}.history.hidden{display:none}.history-item{background:var(--history)}.history-title{font-size:11px;font-weight:800;margin-bottom:5px;color:var(--muted)}.footer-note{text-align:center;color:var(--muted);font-size:11px;margin-top:14px}
@@ -240,6 +258,7 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
 
 <section class="sheet">
   <div class="sheet-head"><h1>優先度マトリックス</h1><input id="theme1" placeholder="テーマ・分野を入力"></div>
+  <div class="hint-line">タップ：関連へジャンプ　／　長押し：編・履・削</div>
   <div class="axis-top-label">実行度</div>
   <div class="matrix-row">
     <div class="axis-left-label">優先度</div>
@@ -322,22 +341,24 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
     }
     data.migratedGapEntries=true;save();
   })();
-  function history(b,text,type){b.history.unshift({id:crypto.randomUUID(),text,date:now(),type})}
+  function history(b,text,type,keywords){b.history.unshift({id:crypto.randomUUID(),text,date:now(),type,keywords:keywords||[]})}
+  const parseKw=s=>[...new Set(String(s||"").split(/[,、，\s]+/).map(t=>t.trim()).filter(Boolean))];
+  let openToolsId=null;
   const editingIds=new Set();
   function renderCell(el){
     const b=bucket(el.dataset.section,el.dataset.cell), cur=el.querySelector(".current-list"), hist=el.querySelector(".history"), count=el.querySelector(".active-count");
     if(count)count.textContent=b.active.length;
     cur.innerHTML=b.active.length?b.active.map(x=>editingIds.has(x.id)?
-      `<div class="item editing" data-id="${esc(x.id)}"><textarea class="edit-area">${esc(x.text)}</textarea><div class="item-meta">更新：${esc(x.date)}</div><div class="item-tools"><button class="btn tiny cancel-btn">キャンセル</button><button class="btn tiny danger delete-btn"><span class="full">削除</span><span class="short">削</span></button><button class="btn tiny primary update-btn">更新</button></div></div>`
-      :`<div class="item" data-id="${esc(x.id)}"><div class="item-main">${esc(x.text)}</div><div class="item-tools"><button class="btn tiny edit-btn"><span class="full">編集</span><span class="short">編</span></button><button class="btn tiny archive-btn"><span class="full">履歴へ</span><span class="short">履</span></button><button class="btn tiny danger delete-btn"><span class="full">削除</span><span class="short">削</span></button></div></div>`
+      `<div class="item editing" data-id="${esc(x.id)}"><textarea class="edit-area">${esc(x.text)}</textarea><input class="edit-kw" placeholder="関連キーワード（例：睡眠、スマホ）" value="${esc((x.keywords||[]).join("、"))}"><div class="item-meta">関連キーワードは一覧に表示されません ／ 更新：${esc(x.date)}</div><div class="item-tools"><button class="btn tiny cancel-btn">キャンセル</button><button class="btn tiny danger delete-btn"><span class="full">削除</span><span class="short">削</span></button><button class="btn tiny primary update-btn">更新</button></div></div>`
+      :`<div class="item${openToolsId===x.id?" show-tools":""}" data-id="${esc(x.id)}"><div class="item-main">${esc(x.text)}</div><div class="item-tools"><button class="btn tiny edit-btn"><span class="full">編集</span><span class="short">編</span></button><button class="btn tiny archive-btn"><span class="full">履歴へ</span><span class="short">履</span></button><button class="btn tiny danger delete-btn"><span class="full">削除</span><span class="short">削</span></button></div></div>`
     ).join(""):`<div class="empty">現在進行中の項目はありません</div>`;
-    hist.innerHTML=`<div class="history-title">過去リスト（履歴） <span class="badge">${b.history.length}</span></div>`+(b.history.length?b.history.map(x=>`<div class="item history-item" data-id="${esc(x.id)}"><div class="item-main">${esc(x.text)}</div><div class="item-meta">${esc(x.date)} ／ ${esc(x.type)}</div><div class="item-tools"><button class="btn tiny danger hist-delete-btn"><span class="full">削除</span><span class="short">削</span></button><button class="btn tiny restore-btn"><span class="full">進行中に戻す</span><span class="short">戻</span></button></div></div>`).join(""):`<div class="empty">履歴はありません</div>`);
-    el.querySelectorAll(".edit-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id;editingIds.add(id);renderAll()});
+    hist.innerHTML=`<div class="history-title">過去リスト（履歴） <span class="badge">${b.history.length}</span></div>`+(b.history.length?b.history.map(x=>`<div class="item history-item${openToolsId===x.id?" show-tools":""}" data-id="${esc(x.id)}"><div class="item-main">${esc(x.text)}</div><div class="item-meta">${esc(x.date)} ／ ${esc(x.type)}</div><div class="item-tools"><button class="btn tiny danger hist-delete-btn"><span class="full">削除</span><span class="short">削</span></button><button class="btn tiny restore-btn"><span class="full">進行中に戻す</span><span class="short">戻</span></button></div></div>`).join(""):`<div class="empty">履歴はありません</div>`);
+    el.querySelectorAll(".edit-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id;editingIds.add(id);openToolsId=null;renderAll()});
     el.querySelectorAll(".cancel-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id;editingIds.delete(id);renderAll()});
-    el.querySelectorAll(".update-btn").forEach(btn=>btn.onclick=()=>{const row=btn.closest(".item"),id=row.dataset.id,item=b.active.find(x=>x.id===id);if(!item)return;const next=row.querySelector(".edit-area").value;if(!next.trim())return;history(b,item.text,"変更前");item.text=next.trim();item.date=now();editingIds.delete(id);save();renderAll()});
+    el.querySelectorAll(".update-btn").forEach(btn=>btn.onclick=()=>{const row=btn.closest(".item"),id=row.dataset.id,item=b.active.find(x=>x.id===id);if(!item)return;const next=row.querySelector(".edit-area").value;if(!next.trim())return;const kws=parseKw(row.querySelector(".edit-kw").value);if(next.trim()!==item.text)history(b,item.text,"変更前",item.keywords);item.text=next.trim();item.keywords=kws;item.date=now();editingIds.delete(id);save();renderAll()});
     el.querySelectorAll(".delete-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id;if(!confirm("この項目を削除します。よろしいですか？"))return;const i=b.active.findIndex(x=>x.id===id);if(i>=0)b.active.splice(i,1);editingIds.delete(id);save();renderAll()});
-    el.querySelectorAll(".archive-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id,i=b.active.findIndex(x=>x.id===id);if(i<0)return;const item=b.active.splice(i,1)[0];history(b,item.text,"履歴へ移動");save();renderAll()});
-    el.querySelectorAll(".restore-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id,i=b.history.findIndex(x=>x.id===id);if(i<0)return;const item=b.history.splice(i,1)[0];b.active.push({id:item.id,text:item.text,date:now()});save();renderAll()});
+    el.querySelectorAll(".archive-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id,i=b.active.findIndex(x=>x.id===id);if(i<0)return;const item=b.active.splice(i,1)[0];history(b,item.text,"履歴へ移動",item.keywords);openToolsId=null;save();renderAll()});
+    el.querySelectorAll(".restore-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id,i=b.history.findIndex(x=>x.id===id);if(i<0)return;const item=b.history.splice(i,1)[0];b.active.push({id:item.id,text:item.text,keywords:item.keywords||[],date:now()});openToolsId=null;save();renderAll()});
     el.querySelectorAll(".hist-delete-btn").forEach(btn=>btn.onclick=()=>{const id=btn.closest(".item").dataset.id;if(!confirm("履歴からこの項目を完全に削除します。よろしいですか？"))return;const i=b.history.findIndex(x=>x.id===id);if(i>=0)b.history.splice(i,1);save();renderAll()});
   }
   function save(){localStorage.setItem(KEY,JSON.stringify(data))}
@@ -483,6 +504,90 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
   document.getElementById("importFile").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!x||!x.cells)throw 0;data=x;save();renderAll();alert("データを復元しました。")}catch{alert("バックアップファイルを読み込めませんでした。")}e.target.value=""};
   document.getElementById("clearBtn").onclick=()=>{if(!confirm("現在の入力・履歴をすべて削除します。よろしいですか？"))return;localStorage.removeItem(KEY);data={theme1:"",theme3:"",cells:{}};renderAll()};
 
+
+  // ---- 優先度リスト：長押しで編・履・削、タップで関連へジャンプ ----
+  const DIARY_KEY="self_analysis_diary_url";
+  const firstLine=s=>String(s||"").split("\n")[0];
+  function toast(m){let t=document.getElementById("toast");if(!t){t=document.createElement("div");t.id="toast";t.className="toast";document.body.appendChild(t)}t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2400)}
+  function findItem(id){const p=data.cells.priority||{};for(const c of Object.keys(p)){const x=(p[c].active||[]).find(v=>v.id===id);if(x)return{item:x,cell:c}}return null}
+  function relatedItems(item){
+    const kws=(item.keywords||[]).map(k=>k.toLowerCase()),out=[],p=data.cells.priority||{};
+    Object.keys(p).forEach(c=>(p[c].active||[]).forEach(x=>{
+      if(x.id===item.id)return;
+      const xk=(x.keywords||[]).map(k=>k.toLowerCase()),t=String(x.text||"").toLowerCase();
+      if(kws.some(k=>xk.includes(k)||t.includes(k)))out.push({item:x,cell:c});
+    }));
+    return out;
+  }
+  function closeJump(){const ov=document.getElementById("jumpSheet");if(ov)ov.classList.remove("open")}
+  function setDiaryUrl(){
+    const cur=localStorage.getItem(DIARY_KEY)||"";
+    const v=prompt("日記アプリのURLを入力（空欄で削除）",cur);
+    if(v===null)return;
+    const t=v.trim();
+    if(!t){localStorage.removeItem(DIARY_KEY);return}
+    try{new URL(t)}catch{alert("URLの形式が正しくありません");return}
+    localStorage.setItem(DIARY_KEY,t);
+  }
+  function openDiary(item){
+    closeJump();
+    let url=localStorage.getItem(DIARY_KEY);
+    if(!url){setDiaryUrl();url=localStorage.getItem(DIARY_KEY);if(!url)return}
+    const u=new URL(url);
+    u.searchParams.set("kw",(item.keywords||[]).join(","));
+    u.searchParams.set("cell",item.id.slice(0,8));
+    const w=window.open(u.toString(),"_blank");
+    if(!w)location.href=u.toString();
+  }
+  function jumpTo(id){
+    closeJump();switchVtab("sheets");
+    setTimeout(()=>{const el=document.querySelector('.item[data-id="'+id+'"]');if(!el)return;el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1900)},60);
+  }
+  function showJumpSheet(kws,opts){
+    let ov=document.getElementById("jumpSheet");
+    if(!ov){
+      ov=document.createElement("div");ov.id="jumpSheet";ov.className="jump-overlay";
+      ov.innerHTML='<div class="jump-box"><div class="jump-title"></div><div class="jump-list"></div><div class="jump-foot"><button type="button" class="btn small" id="jumpUrlBtn">日記URL設定</button><button type="button" class="btn small" id="jumpCloseBtn">閉じる</button></div></div>';
+      document.body.appendChild(ov);
+      ov.addEventListener("click",e=>{if(e.target===ov)closeJump()});
+      ov.querySelector("#jumpCloseBtn").onclick=closeJump;
+      ov.querySelector("#jumpUrlBtn").onclick=setDiaryUrl;
+    }
+    ov.querySelector(".jump-title").textContent="ジャンプ先を選択（キーワード："+kws.join("、")+"）";
+    const list=ov.querySelector(".jump-list");list.innerHTML="";
+    opts.forEach(o=>{const b=document.createElement("button");b.type="button";b.className="btn jump-opt";b.textContent=o.label;b.onclick=o.run;list.appendChild(b)});
+    ov.classList.add("open");
+  }
+  function handleTap(id){
+    const f=findItem(id);if(!f)return;
+    const kws=f.item.keywords||[];
+    if(!kws.length){toast("関連キーワード未設定です（長押し→編で設定）");return}
+    const opts=relatedItems(f.item).map(r=>({label:"→ "+firstLine(r.item.text)+"（"+(LABELS["priority."+r.cell]||"")+"）",run:()=>jumpTo(r.item.id)}));
+    opts.push({label:"📖 日記で探す："+kws.join("、"),run:()=>openDiary(f.item)});
+    if(opts.length===1){opts[0].run();return}
+    showJumpSheet(kws,opts);
+  }
+  let lpTimer=null,lpFired=false,lpStart=null;
+  document.addEventListener("pointerdown",e=>{
+    lpFired=false;
+    const it=e.target.closest(".item");
+    if(!it||it.classList.contains("editing")||e.target.closest(".item-tools"))return;
+    lpStart={x:e.clientX,y:e.clientY};
+    clearTimeout(lpTimer);
+    lpTimer=setTimeout(()=>{lpFired=true;lpStart=null;openToolsId=openToolsId===it.dataset.id?null:it.dataset.id;if(navigator.vibrate)navigator.vibrate(15);renderAll()},500);
+  });
+  document.addEventListener("pointermove",e=>{if(lpStart&&Math.hypot(e.clientX-lpStart.x,e.clientY-lpStart.y)>10){clearTimeout(lpTimer);lpStart=null}});
+  ["pointerup","pointercancel"].forEach(t=>document.addEventListener(t,()=>{clearTimeout(lpTimer);lpStart=null}));
+  document.addEventListener("contextmenu",e=>{if(e.target.closest(".item:not(.editing)"))e.preventDefault()});
+  document.addEventListener("click",e=>{
+    if(lpFired){lpFired=false;return}
+    if(e.target.closest(".item-tools")||e.target.closest(".jump-overlay"))return;
+    if(openToolsId){openToolsId=null;renderAll();return}
+    const it=e.target.closest(".item");
+    if(!it||it.classList.contains("editing")||it.classList.contains("history-item"))return;
+    handleTap(it.dataset.id);
+  });
+
   // ---- デザインテーマ切替（タイトル横の小さな隠れボタン） ----
   const THEME_COLOR={pastel:"#faf8ff",earth:"#f3eeda",braniff:"#fbf3e7",wa:"#f6f1e7"};
   function applyTheme(t){
@@ -495,9 +600,9 @@ button,input,textarea,select{font:inherit}.topbar{position:sticky;top:0;z-index:
   document.querySelectorAll(".tdot").forEach(b=>b.onclick=()=>applyTheme(b.dataset.theme));
   applyTheme(localStorage.getItem("self_analysis_theme")||"pastel");
 
+  switchVtab("sheets");
   renderAll();
 })();
 </script>
-     <script src="github-sync.js"></script>
 </body>
 </html>
